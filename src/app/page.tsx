@@ -1,11 +1,11 @@
 import {
   Heading,
   Text,
+  Column,
+  Badge,
   Button,
   Avatar,
   RevealFx,
-  Column,
-  Badge,
   Row,
   Schema,
   Meta,
@@ -15,6 +15,7 @@ import { home, about, person, baseURL, routes } from "@/resources";
 import { Mailchimp } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
+import VariableProximity from "@/components/VariableProximity";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -67,12 +68,22 @@ export default function Home() {
           )}
           <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
             <Heading wrap="balance" variant="display-strong-l">
-              {home.headline}
+              <VariableProximity
+                label="Resilient Infrastructure & Intelligent IoT Ecosystems"
+                fromWeight={600}
+                toWeight={800}
+                radius={200}
+              />
             </Heading>
           </RevealFx>
           <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="32">
             <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
-              {home.subline}
+              <VariableProximity
+                label="I'm Bayu, an IT Infrastructure Engineer specialized in High Availability Networks, Hybrid Monitoring Systems, and IoT Integration."
+                fromWeight={400}
+                toWeight={600}
+                radius={200}
+              />
             </Text>
           </RevealFx>
           <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">

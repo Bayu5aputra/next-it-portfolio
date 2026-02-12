@@ -1,0 +1,32 @@
+.container {
+    position: relative;
+    display: inline-block;
+    /* or block depending on usage */
+    width: 100%;
+    /* Ensure user can hover anywhere to trigger it if desired, or fit-content */
+}
+
+.blurred {
+    filter: blur(var(--blur-amount));
+    opacity: 0.3;
+    /* Adjusted for better visibility of "off" state */
+    transition: filter 0.3s ease;
+}
+
+.focused {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* The magic: Masking */
+    mask-image: radial-gradient(circle at var(--x, 50%) var(--y, 50%),
+            black 0%,
+            transparent 150px);
+    -webkit-mask-image: radial-gradient(circle at var(--x, 50%) var(--y, 50%),
+            black 0%,
+            transparent 150px);
+    pointer-events: none;
+    /* Let clicks pass through if needed */
+    transition: opacity 0.2s ease;
+}

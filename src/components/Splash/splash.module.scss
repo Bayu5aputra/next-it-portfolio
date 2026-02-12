@@ -1,0 +1,164 @@
+// Easing variables matching Tailwind defaults
+$ease-out: cubic-bezier(0, 0, 0.2, 1);
+$ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+.splashContainer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #27272a 0%, #000000 100%);
+  background-size: cover;
+  transition: opacity 1s $ease-in-out;
+
+  &.fadeOut {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.particlesContainer {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  animation: fadeIn 3s $ease-in-out forwards;
+}
+
+.title {
+  z-index: 10;
+  font-size: 3rem; // text-4xl
+  color: transparent;
+  background-color: white;
+  background-clip: text;
+  -webkit-background-clip: text;
+  cursor: default;
+  white-space: nowrap;
+  font-family: var(--font-display, sans-serif);
+  animation: titleAnimation 3s $ease-out forwards;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  padding: 0 1rem;
+  max-width: 100%;
+
+  @media (min-width: 640px) {
+    font-size: 5rem; // sm:text-6xl
+  }
+
+  @media (min-width: 768px) {
+    font-size: 7rem; // md:text-9xl
+  }
+}
+
+.subtitle {
+  margin-top: 2rem;
+  text-align: center;
+  animation: fadeIn 1.5s $ease-in-out forwards;
+  animation-delay: 2.5s;
+  /* Wait for title animation to near completion */
+  opacity: 0;
+  font-size: 0.875rem; // text-sm
+  color: #71717a; // zinc-500
+  font-family: var(--font-body, sans-serif);
+}
+
+.glowLine {
+  display: none;
+  width: 100vw;
+  height: 1px;
+  background: linear-gradient(to right, rgba(212, 212, 216, 0), rgba(212, 212, 216, 0.5), rgba(212, 212, 216, 0)); // zinc-300
+  animation: glow 3s $ease-in-out forwards;
+
+  @media (min-width: 768px) {
+    display: block;
+  }
+
+  &.fadeLeft {
+    animation: fadeLeft 3s $ease-in-out forwards, glow 3s $ease-in-out forwards;
+  }
+
+  &.fadeRight {
+    animation: fadeRight 3s $ease-in-out forwards, glow 3s $ease-in-out forwards;
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes titleAnimation {
+  0% {
+    line-height: 0%;
+    letter-spacing: 0.25em;
+    opacity: 0;
+  }
+
+  25% {
+    line-height: 0%;
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    line-height: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeLeft {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  30% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeRight {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  30% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes glow {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}

@@ -2,48 +2,34 @@ import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/
 import { Line, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
-  firstName: "Selene",
-  lastName: "Yu",
-  name: `Selene Yu`,
-  role: "Design Engineer",
+  firstName: "Bayu",
+  lastName: "Saputra",
+  name: "Bayu Saputra",
+  role: "IT Infrastructure Engineer",
   avatar: "/images/avatar.jpg",
-  email: "example@gmail.com",
-  location: "Asia/Jakarta", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
+  email: "bayusaputra.005.003@gmail.com",
+  location: "Bekasi, West Java",
+  timeZone: "Asia/Jakarta",
+  languages: ["Bahasa Indonesia", "English"],
 };
 
 const newsletter: Newsletter = {
   display: true,
-  title: <>Subscribe to {person.firstName}'s Newsletter</>,
-  description: <>My weekly newsletter about creativity and engineering</>,
+  title: <>Connect with {person.firstName}</>,
+  description: <>Let's discuss infrastructure, security, and the future of IoT.</>,
 };
 
 const social: Social = [
-  // Links are automatically displayed.
-  // Import new icons in /once-ui/icons.ts
-  // Set essentials: true for links you want to show on the about page
   {
     name: "GitHub",
     icon: "github",
-    link: "https://github.com/once-ui-system",
+    link: "https://github.com/bayu5aputra",
     essential: true,
   },
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/company/once-ui/",
-    essential: true,
-  },
-  {
-    name: "Instagram",
-    icon: "instagram",
-    link: "https://www.instagram.com/once_ui/",
-    essential: false,
-  },
-  {
-    name: "Threads",
-    icon: "threads",
-    link: "https://www.threads.com/@once_ui",
+    link: "https://linkedin.com/in/bayusaputra05",
     essential: true,
   },
   {
@@ -60,24 +46,24 @@ const home: Home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  headline: <>Resilient Infrastructure & <br /> Intelligent IoT Ecosystems</>,
   featured: {
     display: true,
     title: (
       <Row gap="12" vertical="center">
-        <strong className="ml-4">Once UI</strong>{" "}
+        <strong className="ml-4">Recent Work</strong>{" "}
         <Line background="brand-alpha-strong" vert height="20" />
         <Text marginRight="4" onBackground="brand-medium">
-          Featured work
+          Multi-site Network Ops
         </Text>
       </Row>
     ),
-    href: "/work/building-once-ui-a-customizable-design-system",
+    href: "/work",
   },
   subline: (
     <>
-    I'm Selene, a design engineer at <Text as="span" size="xl" weight="strong">ONCE UI</Text>, where I craft intuitive <br /> user experiences. After hours, I build my own projects.
-</>
+      I'm Bayu, an IT Infrastructure Engineer specialized in <Text as="span" size="xl" weight="strong">High Availability Networks</Text>, <br /> Hybrid Monitoring Systems, and IoT Integration.
+    </>
   ),
 };
 
@@ -95,59 +81,97 @@ const about: About = {
   },
   calendar: {
     display: true,
-    link: "https://cal.com",
+    link: "mailto:bayusaputra.005.003@gmail.com",
   },
   intro: {
     display: true,
     title: "Introduction",
     description: (
       <>
-        Selene is a Jakarta-based design engineer with a passion for transforming complex challenges
-        into simple, elegant design solutions. Her work spans digital interfaces, interactive
-        experiences, and the convergence of design and technology.
+        Bayu is an Informatic Engineering graduate from Bani Saleh University with a GPA of 3.76/4.00
+        and proven experience as an IT Infrastructure Engineer. He specializes in orchestrating multi-site
+        network operations, implementing hybrid monitoring systems (ICCC, ITMS, The Dude), and managing
+        complex IoT ecosystems including environmental sensors and CCTV networks.
+        <br /><br />
+        With expert troubleshooting skills in Layer 1/2 connectivity across fiber optic backbones, Bayu
+        combines technical precision with leadership abilities, having managed large student organizations
+        and led engineering recruitment processes.
       </>
     ),
   },
   work: {
-    display: true, // set to false to hide this section
+    display: true,
     title: "Work Experience",
     experiences: [
       {
-        company: "FLY",
-        timeframe: "2022 - Present",
-        role: "Senior Design Engineer",
+        company: "Sinar Mas Land",
+        timeframe: "Nov 2025 – Present",
+        role: "IT Infrastructure Engineer",
         achievements: [
           <>
-            Redesigned the UI/UX for the FLY platform, resulting in a 20% increase in user
-            engagement and 30% faster load times.
+            Orchestrated multi-site network operations using ICCC, ITMS, and The Dude, ensuring high availability.
           </>,
           <>
-            Spearheaded the integration of AI tools into design workflows, enabling designers to
-            iterate 50% faster.
+            Resolved complex Layer 1 & Layer 2 connectivity issues across fiber optic backbones.
+          </>,
+          <>
+            Managed extensive IoT ecosystem including flood sensors, soil sensors, and CCTV networks.
+          </>,
+          <>
+            Conducted preventive maintenance and detailed Root Cause Analysis for P1-P4 incidents within SLA.
           </>,
         ],
-        images: [
-          // optional: leave the array empty if you don't want to display images
-          {
-            src: "/images/projects/project-01/cover-01.jpg",
-            alt: "Once UI Project",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        company: "Creativ3",
-        timeframe: "2018 - 2022",
-        role: "Lead Designer",
+        company: "Sinar Mas Land",
+        timeframe: "Sep 2025 – Nov 2025",
+        role: "IT Infrastructure Internship",
         achievements: [
           <>
-            Developed a design system that unified the brand across multiple platforms, improving
-            design consistency by 40%.
+            Diagnosed and maintained ATCS (Area Traffic Control System) devices and field IoT sensors.
           </>,
           <>
-            Led a cross-functional team to launch a new product line, contributing to a 15% increase
-            in overall company revenue.
+            Developed comprehensive monitoring dashboard using Grafana & Docker.
+          </>,
+        ],
+        images: [],
+      },
+      {
+        company: "Damai Putra Group",
+        timeframe: "Dec 2024 – Jun 2025",
+        role: "IT Support Internship",
+        achievements: [
+          <>
+            Troubleshot hardware, software, and network connectivity; configured LAN/WAN, VPN, and firewalls.
+          </>,
+          <>
+            Managed Windows/Linux servers and Active Directory; implemented IT security measures and ITIL framework.
+          </>,
+        ],
+        images: [],
+      },
+      {
+        company: "BAZNAS",
+        timeframe: "Nov 2024 – Dec 2024",
+        role: "Web Development Internship",
+        achievements: [
+          <>
+            Developed Zakat dashboard utilizing Looker Studio and implemented a web-based email broadcast system.
+          </>,
+        ],
+        images: [],
+      },
+      {
+        company: "Kominfo",
+        timeframe: "Oct 2024 – Nov 2024",
+        role: "Network Technician Internship",
+        achievements: [
+          <>
+            Maintained internet connectivity and installed LAN cabling infrastructure.
+          </>,
+          <>
+            Configured firewall protocols, DHCP Snooping, and detected/mitigated DHCP Rogue devices.
           </>,
         ],
         images: [],
@@ -155,78 +179,60 @@ const about: About = {
     ],
   },
   studies: {
-    display: true, // set to false to hide this section
-    title: "Studies",
+    display: true,
+    title: "Education",
     institutions: [
       {
-        name: "University of Jakarta",
-        description: <>Studied software engineering.</>,
-      },
-      {
-        name: "Build the Future",
-        description: <>Studied online marketing and personal branding.</>,
+        name: "Bani Saleh University",
+        description: (
+          <>
+            Bachelor of Computer Science (GPA: 3.76/4.00)<br />
+            Sep 2021 – Aug 2025<br />
+            Relevant Courses: Network Admin, Computer Architecture, OS, Web/Android Programming.
+          </>
+        ),
       },
     ],
   },
   technical: {
-    display: true, // set to false to hide this section
-    title: "Technical skills",
+    display: true,
+    title: "Technical Skills",
     skills: [
       {
-        title: "Figma",
+        title: "Network & Infra",
         description: (
-          <>Able to prototype in Figma with Once UI with unnatural speed.</>
+          <>Expertise in Fiber Optic Backbones, LAN/WAN, Router/Switch Config.</>
         ),
         tags: [
-          {
-            name: "Figma",
-            icon: "figma",
-          },
+          { name: "Cisco", icon: "globe" },
+          { name: "MikroTik", icon: "globe" }, // generic icon
+          { name: "Fiber Optics", icon: "grid" },
         ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-02.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-          {
-            src: "/images/projects/project-01/cover-03.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        title: "Next.js",
+        title: "Systems & IoT",
         description: (
-          <>Building next gen apps with Next.js + Once UI + Supabase.</>
+          <>Server Administration (Windows/Linux) and IoT Ecosystem Management.</>
         ),
         tags: [
-          {
-            name: "JavaScript",
-            icon: "javascript",
-          },
-          {
-            name: "Next.js",
-            icon: "nextjs",
-          },
-          {
-            name: "Supabase",
-            icon: "supabase",
-          },
+          { name: "Linux", icon: "linux" },
+          { name: "Windows Server", icon: "person" },
+          { name: "IoT", icon: "grid" },
         ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-04.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
+        images: [],
+      },
+      {
+        title: "Programming",
+        description: (
+          <>Development skills for automation and dashboards.</>
+        ),
+        tags: [
+          { name: "Python", icon: "person" },
+          { name: "JavaScript", icon: "javascript" },
+          { name: "Flutter", icon: "person" },
         ],
+        images: [],
       },
     ],
   },
@@ -235,68 +241,27 @@ const about: About = {
 const blog: Blog = {
   path: "/blog",
   label: "Blog",
-  title: "Writing about design and tech...",
-  description: `Read what ${person.name} has been up to recently`,
-  // Create new blog posts by adding a new .mdx file to app/blog/posts
-  // All posts will be listed on the /blog route
+  title: "Engineering Logs",
+  description: `Technical notes and insights from ${person.name}`,
 };
 
 const work: Work = {
   path: "/work",
   label: "Work",
   title: `Projects – ${person.name}`,
-  description: `Design and dev projects by ${person.name}`,
-  // Create new project pages by adding a new .mdx file to app/blog/posts
-  // All projects will be listed on the /home and /work routes
+  description: `Infrastructure and Development projects by ${person.name}`,
 };
 
 const gallery: Gallery = {
   path: "/gallery",
   label: "Gallery",
-  title: `Photo gallery – ${person.name}`,
-  description: `A photo collection by ${person.name}`,
-  // Images by https://lorant.one
-  // These are placeholder images, replace with your own
+  title: `Moments – ${person.name}`,
+  description: `A collection of milestones and memories`,
   images: [
     {
       src: "/images/gallery/horizontal-1.jpg",
       alt: "image",
       orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/vertical-4.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/horizontal-3.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/vertical-1.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/vertical-2.jpg",
-      alt: "image",
-      orientation: "vertical",
-    },
-    {
-      src: "/images/gallery/horizontal-2.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/horizontal-4.jpg",
-      alt: "image",
-      orientation: "horizontal",
-    },
-    {
-      src: "/images/gallery/vertical-3.jpg",
-      alt: "image",
-      orientation: "vertical",
     },
   ],
 };
