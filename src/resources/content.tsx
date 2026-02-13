@@ -1,4 +1,4 @@
-import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
+import type { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
 import { Line, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
@@ -46,7 +46,11 @@ const home: Home = {
   label: "Home",
   title: `${person.name}'s Portfolio`,
   description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Resilient Infrastructure & <br /> Intelligent IoT Ecosystems</>,
+  headline: (
+    <>
+      Resilient Infrastructure & <br /> Intelligent IoT Ecosystems
+    </>
+  ),
   featured: {
     display: true,
     title: (
@@ -62,7 +66,11 @@ const home: Home = {
   },
   subline: (
     <>
-      I'm Bayu, an IT Infrastructure Engineer specialized in <Text as="span" size="xl" weight="strong">High Availability Networks</Text>, <br /> Hybrid Monitoring Systems, and IoT Integration.
+      I'm Bayu, an IT Infrastructure Engineer specialized in{" "}
+      <Text as="span" size="xl" weight="strong">
+        High Availability Networks
+      </Text>
+      , <br /> Hybrid Monitoring Systems, and IoT Integration.
     </>
   ),
 };
@@ -88,14 +96,16 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        Bayu is an Informatic Engineering graduate from Bani Saleh University with a GPA of 3.76/4.00
-        and proven experience as an IT Infrastructure Engineer. He specializes in orchestrating multi-site
-        network operations, implementing hybrid monitoring systems (ICCC, ITMS, The Dude), and managing
-        complex IoT ecosystems including environmental sensors and CCTV networks.
-        <br /><br />
-        With expert troubleshooting skills in Layer 1/2 connectivity across fiber optic backbones, Bayu
-        combines technical precision with leadership abilities, having managed large student organizations
-        and led engineering recruitment processes.
+        Bayu is an Informatic Engineering graduate from Bani Saleh University with a GPA of
+        3.76/4.00 and proven experience as an IT Infrastructure Engineer. He specializes in
+        orchestrating multi-site network operations, implementing hybrid monitoring systems (ICCC,
+        ITMS, The Dude), and managing complex IoT ecosystems including environmental sensors and
+        CCTV networks.
+        <br />
+        <br />
+        With expert troubleshooting skills in Layer 1/2 connectivity across fiber optic backbones,
+        Bayu combines technical precision with leadership abilities, having managed large student
+        organizations and led engineering recruitment processes.
       </>
     ),
   },
@@ -109,16 +119,17 @@ const about: About = {
         role: "IT Infrastructure Engineer",
         achievements: [
           <>
-            Orchestrated multi-site network operations using ICCC, ITMS, and The Dude, ensuring high availability.
+            Orchestrated multi-site network operations using ICCC, ITMS, and The Dude, ensuring high
+            availability.
+          </>,
+          <>Resolved complex Layer 1 & Layer 2 connectivity issues across fiber optic backbones.</>,
+          <>
+            Managed extensive IoT ecosystem including flood sensors, soil sensors, and CCTV
+            networks.
           </>,
           <>
-            Resolved complex Layer 1 & Layer 2 connectivity issues across fiber optic backbones.
-          </>,
-          <>
-            Managed extensive IoT ecosystem including flood sensors, soil sensors, and CCTV networks.
-          </>,
-          <>
-            Conducted preventive maintenance and detailed Root Cause Analysis for P1-P4 incidents within SLA.
+            Conducted preventive maintenance and detailed Root Cause Analysis for P1-P4 incidents
+            within SLA.
           </>,
         ],
         images: [],
@@ -129,11 +140,10 @@ const about: About = {
         role: "IT Infrastructure Internship",
         achievements: [
           <>
-            Diagnosed and maintained ATCS (Area Traffic Control System) devices and field IoT sensors.
+            Diagnosed and maintained ATCS (Area Traffic Control System) devices and field IoT
+            sensors.
           </>,
-          <>
-            Developed comprehensive monitoring dashboard using Grafana & Docker.
-          </>,
+          <>Developed comprehensive monitoring dashboard using Grafana & Docker.</>,
         ],
         images: [],
       },
@@ -143,10 +153,12 @@ const about: About = {
         role: "IT Support Internship",
         achievements: [
           <>
-            Troubleshot hardware, software, and network connectivity; configured LAN/WAN, VPN, and firewalls.
+            Troubleshot hardware, software, and network connectivity; configured LAN/WAN, VPN, and
+            firewalls.
           </>,
           <>
-            Managed Windows/Linux servers and Active Directory; implemented IT security measures and ITIL framework.
+            Managed Windows/Linux servers and Active Directory; implemented IT security measures and
+            ITIL framework.
           </>,
         ],
         images: [],
@@ -157,7 +169,8 @@ const about: About = {
         role: "Web Development Internship",
         achievements: [
           <>
-            Developed Zakat dashboard utilizing Looker Studio and implemented a web-based email broadcast system.
+            Developed Zakat dashboard utilizing Looker Studio and implemented a web-based email
+            broadcast system.
           </>,
         ],
         images: [],
@@ -167,9 +180,7 @@ const about: About = {
         timeframe: "Oct 2024 – Nov 2024",
         role: "Network Technician Internship",
         achievements: [
-          <>
-            Maintained internet connectivity and installed LAN cabling infrastructure.
-          </>,
+          <>Maintained internet connectivity and installed LAN cabling infrastructure.</>,
           <>
             Configured firewall protocols, DHCP Snooping, and detected/mitigated DHCP Rogue devices.
           </>,
@@ -186,8 +197,10 @@ const about: About = {
         name: "Bani Saleh University",
         description: (
           <>
-            Bachelor of Computer Science (GPA: 3.76/4.00)<br />
-            Sep 2021 – Aug 2025<br />
+            Bachelor of Computer Science (GPA: 3.76/4.00)
+            <br />
+            Sep 2021 – Aug 2025
+            <br />
             Relevant Courses: Network Admin, Computer Architecture, OS, Web/Android Programming.
           </>
         ),
@@ -200,9 +213,7 @@ const about: About = {
     skills: [
       {
         title: "Network & Infra",
-        description: (
-          <>Expertise in Fiber Optic Backbones, LAN/WAN, Router/Switch Config.</>
-        ),
+        description: <>Expertise in Fiber Optic Backbones, LAN/WAN, Router/Switch Config.</>,
         tags: [
           { name: "Cisco", icon: "globe" },
           { name: "MikroTik", icon: "globe" }, // generic icon
@@ -212,9 +223,7 @@ const about: About = {
       },
       {
         title: "Systems & IoT",
-        description: (
-          <>Server Administration (Windows/Linux) and IoT Ecosystem Management.</>
-        ),
+        description: <>Server Administration (Windows/Linux) and IoT Ecosystem Management.</>,
         tags: [
           { name: "Linux", icon: "linux" },
           { name: "Windows Server", icon: "person" },
@@ -224,9 +233,7 @@ const about: About = {
       },
       {
         title: "Programming",
-        description: (
-          <>Development skills for automation and dashboards.</>
-        ),
+        description: <>Development skills for automation and dashboards.</>,
         tags: [
           { name: "Python", icon: "person" },
           { name: "JavaScript", icon: "javascript" },

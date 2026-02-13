@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 
 import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
 
-import { routes, display, person, about, blog, work, gallery } from "@/resources";
-import { ThemeToggle } from "./ThemeToggle";
+import { about, blog, display, gallery, person, routes, work } from "@/resources";
 import styles from "./Header.module.scss";
+import { ThemeToggle } from "./ThemeToggle";
 import TrueFocus from "./TrueFocus";
 
 type TimeDisplayProps = {
@@ -40,11 +40,7 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" })
 
   return (
     <>
-      <TrueFocus
-        manualMode
-        blurAmount={2}
-        borderColor="transparent"
-      >
+      <TrueFocus manualMode blurAmount={2} borderColor="transparent">
         {currentTime}
       </TrueFocus>
     </>
@@ -86,11 +82,7 @@ export const Header = () => {
         <Row paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
           {display.location && (
             <Row s={{ hide: true }}>
-              <TrueFocus
-                manualMode
-                blurAmount={2}
-                borderColor="transparent"
-              >
+              <TrueFocus manualMode blurAmount={2} borderColor="transparent">
                 {person.location}
               </TrueFocus>
             </Row>

@@ -6,7 +6,8 @@
     "useIgnoreFile": false
   },
   "files": {
-    "ignoreUnknown": false
+    "ignoreUnknown": false,
+    "ignore": [".agents", ".next", "dist", "node_modules", "chronark_ref"]
   },
   "formatter": {
     "enabled": true,

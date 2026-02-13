@@ -1,20 +1,21 @@
+import VariableProximity from "@/components/VariableProximity";
+import { PixelTransition } from "@/components/PixelTransition";
+import { Posts } from "@/components/blog/Posts";
+import { Projects } from "@/components/work/Projects";
+import { about, baseURL, home, person, routes } from "@/resources";
 import {
-  Heading,
-  Text,
-  Column,
+  Avatar,
   Badge,
   Button,
-  Avatar,
+  Column,
+  Heading,
+  Line,
+  Meta,
   RevealFx,
   Row,
   Schema,
-  Meta,
-  Line,
+  Text,
 } from "@once-ui-system/core";
-import { home, about, person, baseURL, routes } from "@/resources";
-import { Projects } from "@/components/work/Projects";
-import { Posts } from "@/components/blog/Posts";
-import VariableProximity from "@/components/VariableProximity";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -68,7 +69,7 @@ export default function Home() {
           <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
             <Heading wrap="balance" variant="display-strong-l">
               <VariableProximity
-                label="Resilient Infrastructure & Intelligent IoT Ecosystems"
+                label="Resilient Infrastructure & Intelligent IoT Ecosystems"
                 fromWeight={600}
                 toWeight={800}
                 radius={200}
@@ -97,12 +98,26 @@ export default function Home() {
             >
               <Row gap="8" vertical="center" paddingRight="4">
                 {about.avatar.display && (
-                  <Avatar
-                    marginRight="8"
-                    style={{ marginLeft: "-0.75rem" }}
-                    src={person.avatar}
-                    size="m"
-                  />
+                  <div
+                    style={{
+                      marginLeft: "-0.75rem",
+                      marginRight: "0.5rem",
+                      width: "2rem", // size="m" approx
+                      height: "2rem",
+                      borderRadius: "50%",
+                      overflow: "hidden",
+                      position: "relative",
+                      zIndex: 1,
+                    }}
+                  >
+                    <PixelTransition
+                      src={person.avatar}
+                      alt={person.name}
+                      gridSize={4}
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
                 )}
                 {about.title}
               </Row>

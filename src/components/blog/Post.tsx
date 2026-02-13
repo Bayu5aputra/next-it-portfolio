@@ -1,11 +1,13 @@
 "use client";
 
-import { Card, Column, Media, Row, Avatar, Text } from "@once-ui-system/core";
-import { formatDate } from "@/utils/formatDate";
+import { PixelTransition } from "@/components/PixelTransition";
 import { person } from "@/resources";
+import type { PostData } from "@/utils/utils";
+import { formatDate } from "@/utils/formatDate";
+import { Avatar, Card, Column, Row, Text } from "@once-ui-system/core";
 
 interface PostProps {
-  post: any;
+  post: PostData;
   thumbnail: boolean;
   direction?: "row" | "column";
 }
@@ -26,16 +28,24 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
       s={{ direction: "column" }}
     >
       {post.metadata.image && thumbnail && (
-        <Media
-          priority
-          sizes="(max-width: 768px) 100vw, 640px"
-          border="neutral-alpha-weak"
-          cursor="interactive"
-          radius="l"
-          src={post.metadata.image}
-          alt={"Thumbnail of " + post.metadata.title}
-          aspectRatio="16 / 9"
-        />
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            aspectRatio: "16 / 9",
+            borderRadius: "var(--radius-l)", // Approximation of radius="l"
+            overflow: "hidden",
+            border: "1px solid var(--neutral-alpha-weak)", // Approximation of border="neutral-alpha-weak"
+          }}
+        >
+          <PixelTransition
+            src={post.metadata.image}
+            alt={`Thumbnail of ${post.metadata.title}`}
+            gridSize={12}
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        </div>
       )}
       <Row fillWidth>
         <Column maxWidth={28} paddingY="24" paddingX="l" gap="20" vertical="center">

@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import { Splash } from "./Splash";
 
 export const SplashWrapper = () => {
-    const [show, setShow] = useState(true);
+  const [show, setShow] = useState(true);
 
-    if (!show) return null;
+  if (!show) return null;
 
-    return <Splash onComplete={() => setShow(false)} />;
+  return <Splash onComplete={() => setShow(false)} />;
 };
