@@ -226,17 +226,21 @@ export interface Blog extends BasePageConfig {}
 export interface Work extends BasePageConfig {}
 
 /**
- * Gallery page configuration.
- * @description Configuration for the Gallery page, including metadata, navigation label, and image list.
+ * Badges page configuration.
+ * @description Configuration for the Badges/Certifications page.
  */
-export interface Gallery extends BasePageConfig {
-  /** List of images in the gallery */
-  images: Array<{
+export interface Badges extends BasePageConfig {
+  /** List of badges/certifications */
+  items: Array<{
     /** Image source path */
     src: string;
     /** Image alt text */
     alt: string;
-    /** Image orientation (horizontal/vertical) */
-    orientation: string;
+    /** Badge title */
+    title: string;
+    /** Badge issuer */
+    issuer: string;
+    /** Credential URL */
+    link?: string;
   }>;
 }

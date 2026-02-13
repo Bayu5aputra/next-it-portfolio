@@ -110,13 +110,51 @@ export default function Home() {
                       zIndex: 1,
                     }}
                   >
-                    <PixelTransition
-                      src={person.avatar}
-                      alt={person.name}
-                      gridSize={4}
-                      fill
-                      style={{ objectFit: "cover" }}
-                    />
+                      <PixelTransition
+                        firstContent={
+                          <div
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              borderRadius: "50%",
+                              overflow: "hidden",
+                              position: "relative",
+                            }}
+                          >
+                            <img
+                              src={person.avatar}
+                              alt={person.name}
+                              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            />
+                          </div>
+                        }
+                        secondContent={
+                          <div
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              display: "grid",
+                              placeItems: "center",
+                              backgroundColor: "var(--brand-surface-strong)",
+                              borderRadius: "50%",
+                            }}
+                          >
+                            <div
+                              style={{
+                                fontSize: "0.8rem",
+                                fontWeight: "bold",
+                                color: "var(--brand-on-background-medium)",
+                              }}
+                            >
+                              BS
+                            </div>
+                          </div>
+                        }
+                        gridSize={4}
+                        pixelColor="var(--brand-surface-strong)"
+                        style={{ width: "100%", height: "100%" }}
+                        aspectRatio="100%"
+                      />
                   </div>
                 )}
                 {about.title}

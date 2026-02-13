@@ -141,6 +141,7 @@ export default function ClientLayout({
           )}
           <Flex
             fillWidth
+            flex={1}
             direction="column"
             style={{ alignItems: "center" }}
             key={isContentVisible ? "visible" : "hidden"}

@@ -1,99 +1,200 @@
 "use client";
 
-import { useRef, useEffect, useState, type CSSProperties, type FC, type JSX } from "react";
-import Image from "next/image";
-import type { ImageProps } from "next/image";
-import styles from "./PixelTransition.module.scss";
+import { gsap } from "gsap";
+import type React from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 
-interface PixelTransitionProps extends Omit<ImageProps, "onLoad"> {
+interface PixelTransitionProps {
+  firstContent: React.ReactNode | string;
+  secondContent: React.ReactNode | string;
   gridSize?: number;
   pixelColor?: string;
-  animationDuration?: number;
-  animationDelay?: number;
+  animationStepDuration?: number;
+  once?: boolean;
+  className?: string;
+  style?: CSSProperties;
+  aspectRatio?: string;
 }
 
-export const PixelTransition: FC<PixelTransitionProps> = ({
-  src,
-  alt,
-  className,
-  gridSize = 7, // Smaller default for better reolution
-  pixelColor = "#060010", // Match the dark theme background
-  animationDuration = 0.8,
-  animationDelay = 0,
-  style,
-  ...imageProps
+export const PixelTransition: React.FC<PixelTransitionProps> = ({
+  firstContent,
+  secondContent,
+  gridSize = 7,
+  pixelColor = "currentColor",
+  animationStepDuration = 0.3,
+  once = false,
+  aspectRatio = "100%",
+  className = "",
+  style = {},
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [pixels, setPixels] = useState<JSX.Element[]>([]);
-  const [isActive, setIsActive] = useState(false);
+  const containerRef = useRef<HTMLButtonElement | null>(null);
+  const pixelGridRef = useRef<HTMLDivElement | null>(null);
+  const activeRef = useRef<HTMLDivElement | null>(null);
+  const delayedCallRef = useRef<gsap.core.Tween | null>(null);
+
+  const [isActive, setIsActive] = useState<boolean>(false);
+
+  const isTouchDevice =
+    typeof window !== "undefined" &&
+    ("ontouchstart" in window ||
+      navigator.maxTouchPoints > 0 ||
+      window.matchMedia("(pointer: coarse)").matches);
 
   useEffect(() => {
-    // Determine grid dimensions based on container size
-    const updateGrid = () => {
-      if (!containerRef.current) return;
-      const { width, height } = containerRef.current.getBoundingClientRect();
-      if (width === 0 || height === 0) return;
+    const pixelGridEl = pixelGridRef.current;
+    if (!pixelGridEl) return;
 
-      const cols = Math.ceil(width / gridSize);
-      const rows = Math.ceil(height / gridSize);
-      const totalPixels = cols * rows;
+    pixelGridEl.innerHTML = "";
 
-      // Generate pixels with computed styles for staggered animation for a "digital" feel
-      const newPixels = Array.from({ length: totalPixels }).map((_, i) => {
-        const randomDelay = Math.random() * animationDuration;
-        return (
-          <div
-            // biome-ignore lint/suspicious/noArrayIndexKey: Grid is static relative to container size
-            key={i}
-            className={styles.pixel}
-            style={
-              {
-                width: `${100 / cols}%`,
-                height: `${100 / rows}%`,
-                backgroundColor: pixelColor,
-                transitionDelay: `${randomDelay}s`,
-              } as CSSProperties
-            }
-          />
-        );
-      });
+    for (let row = 0; row < gridSize; row++) {
+      for (let col = 0; col < gridSize; col++) {
+        const pixel = document.createElement("div");
+        pixel.classList.add("pixelated-image-card__pixel");
+        pixel.style.position = "absolute";
+        pixel.style.display = "none";
+        pixel.style.backgroundColor = pixelColor;
 
-      setPixels(newPixels);
+        const size = 100 / gridSize;
+        pixel.style.width = `${size}%`;
+        pixel.style.height = `${size}%`;
+        pixel.style.left = `${col * size}%`;
+        pixel.style.top = `${row * size}%`;
 
-      // Trigger the "reveal" after a short delay to ensure pixels are rendered
-      setTimeout(() => setIsActive(true), 100 + animationDelay * 1000);
-    };
+        pixelGridEl.appendChild(pixel);
+      }
+    }
+  }, [gridSize, pixelColor]);
 
-    // Use ResizeObserver for more robust resizing support
-    const resizeObserver = new ResizeObserver(() => {
-      updateGrid();
-    });
+  const animatePixels = (activate: boolean): void => {
+    setIsActive(activate);
 
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
+    const pixelGridEl = pixelGridRef.current;
+    const activeEl = activeRef.current;
+    if (!pixelGridEl || !activeEl) return;
+
+    const pixels = pixelGridEl.querySelectorAll<HTMLDivElement>(".pixelated-image-card__pixel");
+    if (!pixels.length) return;
+
+    gsap.killTweensOf(pixels);
+    if (delayedCallRef.current) {
+      delayedCallRef.current.kill();
     }
 
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [gridSize, pixelColor, animationDuration, animationDelay]);
+    gsap.set(pixels, { display: "none" });
+
+    const totalPixels = pixels.length;
+    const staggerDuration = animationStepDuration / totalPixels;
+
+    gsap.to(pixels, {
+      display: "block",
+      duration: 0,
+      stagger: {
+        each: staggerDuration,
+        from: "random",
+      },
+    });
+
+    delayedCallRef.current = gsap.delayedCall(animationStepDuration, () => {
+      activeEl.style.display = activate ? "block" : "none";
+      activeEl.style.pointerEvents = activate ? "none" : "";
+    });
+
+    gsap.to(pixels, {
+      display: "none",
+      duration: 0,
+      delay: animationStepDuration,
+      stagger: {
+        each: staggerDuration,
+        from: "random",
+      },
+    });
+  };
+
+  const handleEnter = (): void => {
+    if (!isActive) animatePixels(true);
+  };
+  const handleLeave = (): void => {
+    if (isActive && !once) animatePixels(false);
+  };
+  const handleClick = (): void => {
+    if (!isActive) animatePixels(true);
+    else if (isActive && !once) animatePixels(false);
+  };
+  const handleKeyDown = (e: React.KeyboardEvent): void => {
+    if (e.key === "Enter" || e.key === " ") {
+      if (!isActive) animatePixels(true);
+      else if (isActive && !once) animatePixels(false);
+    }
+  };
 
   return (
-    <div
-      ref={containerRef}
-      className={`${styles.container} ${className || ""}`}
-      style={{ ...style, position: "relative", overflow: "hidden" }}
+    <button
+      ref={containerRef as React.RefObject<HTMLButtonElement>}
+      className={className}
+      style={{
+        ...style,
+        position: "relative",
+        overflow: "hidden",
+        width: "100%",
+        height: "100%",
+        display: "block",
+        background: "none",
+        border: "none",
+        padding: 0,
+        textAlign: "left",
+        cursor: "pointer",
+      }}
+      onMouseEnter={!isTouchDevice ? handleEnter : undefined}
+      onMouseLeave={!isTouchDevice ? handleLeave : undefined}
+      onClick={isTouchDevice ? handleClick : undefined}
+      onFocus={!isTouchDevice ? handleEnter : undefined}
+      onBlur={!isTouchDevice ? handleLeave : undefined}
+      onKeyDown={handleKeyDown}
+      type="button"
     >
-      <Image
-        src={src}
-        alt={alt}
-        className={styles.image}
-        style={{ opacity: isActive ? 1 : 0, transition: `opacity 0.1s ease ${animationDuration}s` }} // Ensure image is fully visible after transition
-        {...imageProps}
-      />
-      <div className={`${styles.pixelGrid} ${isActive ? styles.active : ""}`} aria-hidden="true">
-        {pixels}
+      <div style={{ paddingTop: aspectRatio, pointerEvents: "none" }} />
+
+      <div
+        className="initial-content"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 1,
+        }}
+        aria-hidden={isActive}
+      >
+        {firstContent}
       </div>
-    </div>
+
+      <div
+        ref={activeRef}
+        className="revealed-content"
+        style={{
+          display: "none",
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 2,
+        }}
+        aria-hidden={!isActive}
+      >
+        {secondContent}
+      </div>
+
+      <div
+        ref={pixelGridRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          zIndex: 3,
+        }}
+      />
+    </button>
   );
 };
