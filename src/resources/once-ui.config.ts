@@ -37,31 +37,42 @@ const protectedRoutes: ProtectedRoutesConfig = {
 };
 
 // Import and set font for each variant
-import { Geist } from "next/font/google";
-import { Geist_Mono } from "next/font/google";
+import { JetBrains_Mono, Manrope, Space_Grotesk, Syne } from "next/font/google";
 
-const heading = Geist({
+// Previous font setup (kept for quick rollback):
+// import { Geist } from "next/font/google";
+// import { Geist_Mono } from "next/font/google";
+// const heading = Geist({ variable: "--font-heading", subsets: ["latin"], display: "swap" });
+// const body = Geist({ variable: "--font-body", subsets: ["latin"], display: "swap" });
+// const label = Geist({ variable: "--font-label", subsets: ["latin"], display: "swap" });
+// const code = Geist_Mono({ variable: "--font-code", subsets: ["latin"], display: "swap" });
+
+const heading = Syne({
   variable: "--font-heading",
   subsets: ["latin"],
   display: "swap",
+  weight: ["600", "700", "800"],
 });
 
-const body = Geist({
+const body = Manrope({
   variable: "--font-body",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
-const label = Geist({
+const label = Space_Grotesk({
   variable: "--font-label",
   subsets: ["latin"],
   display: "swap",
+  weight: ["500", "600", "700"],
 });
 
-const code = Geist_Mono({
+const code = JetBrains_Mono({
   variable: "--font-code",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "700"],
 });
 
 const fonts: FontsConfig = {
@@ -186,7 +197,7 @@ const mailchimp: MailchimpConfig = {
 
 // default schema data
 const schema: SchemaConfig = {
-  logo: "",
+  logo: "/icon.jpg",
   type: "Person",
   name: "Bayu Saputra",
   description: "Portfolio website showcasing my work as an IT Infrastructure Engineer",

@@ -12,7 +12,6 @@ import {
   Heading,
   Line,
   Media,
-  Meta,
   Row,
   Schema,
   SmartLink,
@@ -43,13 +42,27 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  return Meta.generate({
+  const image = post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`;
+  const canonical = `${work.path}/${post.slug}`;
+  return {
     title: post.metadata.title,
     description: post.metadata.summary,
-    baseURL: baseURL,
-    image: post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
-    path: `${work.path}/${post.slug}`,
-  });
+    alternates: { canonical },
+    openGraph: {
+      title: post.metadata.title,
+      description: post.metadata.summary,
+      url: `${baseURL}${canonical}`,
+      type: "article",
+      publishedTime: post.metadata.publishedAt,
+      images: [{ url: image, width: 1200, height: 630, alt: post.metadata.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.metadata.title,
+      description: post.metadata.summary,
+      images: [image],
+    },
+  };
 }
 
 export default async function Project({
@@ -76,7 +89,7 @@ export default async function Project({
   return (
     <Column as="section" maxWidth="m" horizontal="center" gap="l">
       <Schema
-        as="blogPosting"
+        as="webPage"
         baseURL={baseURL}
         path={`${work.path}/${post.slug}`}
         title={post.metadata.title}
@@ -106,7 +119,7 @@ export default async function Project({
           {post.metadata.team && <AvatarGroup reverse avatars={avatars} size="s" />}
           <Text variant="label-default-m" onBackground="brand-weak">
             {post.metadata.team?.map((member, idx) => (
-              <span key={idx}>
+              <span key={member.linkedIn || member.name}>
                 {idx > 0 && (
                   <Text as="span" onBackground="neutral-weak">
                     ,{" "}
@@ -119,7 +132,13 @@ export default async function Project({
         </Row>
       </Row>
       {post.metadata.images.length > 0 && (
-        <Media priority aspectRatio="16 / 9" radius="m" alt="image" src={post.metadata.images[0]} />
+        <Media
+          priority
+          aspectRatio="16 / 9"
+          radius="m"
+          alt={post.metadata.title}
+          src={post.metadata.images[0]}
+        />
       )}
       <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
         <CustomMDX source={post.content} />

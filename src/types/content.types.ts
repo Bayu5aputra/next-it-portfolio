@@ -181,6 +181,24 @@ export interface About extends BasePageConfig {
       description: React.ReactNode;
     }>;
   };
+  /** Organization experience section */
+  organization: {
+    /** Whether to display organization section */
+    display: boolean;
+    /** Title for the organization section */
+    title: string;
+    /** List of organization experiences */
+    experiences: Array<{
+      /** Organization name */
+      organization: string;
+      /** Timeframe */
+      timeframe: string;
+      /** Role */
+      role: string;
+      /** Responsibilities */
+      achievements: React.ReactNode[];
+    }>;
+  };
   /** Technical skills section */
   technical: {
     /** Whether to display technical skills section */
@@ -240,7 +258,19 @@ export interface Badges extends BasePageConfig {
     title: string;
     /** Badge issuer */
     issuer: string;
+    /** Issue date, e.g. "Feb 2025" */
+    issued: string;
+    /** Expiration date, e.g. "Feb 2028" */
+    expires?: string;
+    /** Credential identifier */
+    credentialId?: string;
+    /** Skills associated with this badge */
+    skills?: string[];
     /** Credential URL */
     link?: string;
+    /** Force logo inversion in dark theme for black/dark logos */
+    invertInDark?: boolean;
+    /** Credly badge id for embedded badge card */
+    credlyBadgeId?: string;
   }>;
 }

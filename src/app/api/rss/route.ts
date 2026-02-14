@@ -2,6 +2,12 @@ import { baseURL, blog, person } from "@/resources";
 import { getPosts } from "@/utils/utils";
 import { NextResponse } from "next/server";
 
+function toAbsoluteUrl(pathOrUrl: string): string {
+  if (!pathOrUrl) return "";
+  if (pathOrUrl.startsWith("http://") || pathOrUrl.startsWith("https://")) return pathOrUrl;
+  return `${baseURL}${pathOrUrl.startsWith("/") ? pathOrUrl : `/${pathOrUrl}`}`;
+}
+
 export async function GET() {
   const posts = getPosts(["src", "app", "blog", "posts"]);
 
@@ -23,7 +29,7 @@ export async function GET() {
     <managingEditor>${person.email || "noreply@example.com"} (${person.name})</managingEditor>
     <webMaster>${person.email || "noreply@example.com"} (${person.name})</webMaster>
     <image>
-      <url>${baseURL}${person.avatar || "/images/avatar.jpg"}</url>
+      <url>${baseURL}${person.avatar || "/images/avatar-20260215.jpg"}</url>
       <title>${blog.title}</title>
       <link>${baseURL}/blog</link>
     </image>
@@ -36,7 +42,7 @@ export async function GET() {
       <guid>${baseURL}/blog/${post.slug}</guid>
       <pubDate>${new Date(post.metadata.publishedAt).toUTCString()}</pubDate>
       <description><![CDATA[${post.metadata.summary}]]></description>
-      ${post.metadata.image ? `<enclosure url="${baseURL}${post.metadata.image}" type="image/jpeg" />` : ""}
+      ${post.metadata.image ? `<enclosure url="${toAbsoluteUrl(post.metadata.image)}" type="image/jpeg" />` : ""}
       ${post.metadata.tag ? `<category>${post.metadata.tag}</category>` : ""}
       <author>${person.email || "noreply@example.com"} (${person.name})</author>
     </item>`,
@@ -53,3 +59,4 @@ export async function GET() {
     },
   });
 }
+

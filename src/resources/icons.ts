@@ -25,6 +25,7 @@ import {
 import { SiFigma, SiJavascript, SiNextdotjs, SiSupabase } from "react-icons/si";
 
 import {
+  FaAward,
   FaDiscord,
   FaFacebook,
   FaGithub,
@@ -72,6 +73,7 @@ export const iconLibrary: Record<string, IconType> = {
   reddit: FaReddit,
   telegram: FaTelegram,
   instagram: FaInstagram,
+  award: FaAward,
 };
 
 export type IconLibrary = typeof iconLibrary;

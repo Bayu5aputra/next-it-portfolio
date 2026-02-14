@@ -1,22 +1,35 @@
 import { Posts } from "@/components/blog/Posts";
-import { baseURL, blog, newsletter, person } from "@/resources";
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
+import { baseURL, blog, person } from "@/resources";
+import { Column, Heading, Schema } from "@once-ui-system/core";
+import type { Metadata } from "next";
 
-export async function generateMetadata() {
-  return Meta.generate({
+export async function generateMetadata(): Promise<Metadata> {
+  const image = `/api/og/generate?title=${encodeURIComponent(blog.title)}`;
+  return {
     title: blog.title,
     description: blog.description,
-    baseURL: baseURL,
-    image: `/api/og/generate?title=${encodeURIComponent(blog.title)}`,
-    path: blog.path,
-  });
+    alternates: { canonical: blog.path },
+    openGraph: {
+      title: blog.title,
+      description: blog.description,
+      url: `${baseURL}${blog.path}`,
+      type: "website",
+      images: [{ url: image, width: 1200, height: 630, alt: blog.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: blog.title,
+      description: blog.description,
+      images: [image],
+    },
+  };
 }
 
 export default function Blog() {
   return (
     <Column maxWidth="m" paddingTop="24">
       <Schema
-        as="blogPosting"
+        as="webPage"
         baseURL={baseURL}
         title={blog.title}
         description={blog.description}

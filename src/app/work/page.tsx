@@ -1,15 +1,28 @@
 import { Projects } from "@/components/work/Projects";
 import { about, baseURL, person, work } from "@/resources";
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
+import { Column, Heading, Schema } from "@once-ui-system/core";
+import type { Metadata } from "next";
 
-export async function generateMetadata() {
-  return Meta.generate({
+export async function generateMetadata(): Promise<Metadata> {
+  const image = `/api/og/generate?title=${encodeURIComponent(work.title)}`;
+  return {
     title: work.title,
     description: work.description,
-    baseURL: baseURL,
-    image: `/api/og/generate?title=${encodeURIComponent(work.title)}`,
-    path: work.path,
-  });
+    alternates: { canonical: work.path },
+    openGraph: {
+      title: work.title,
+      description: work.description,
+      url: `${baseURL}${work.path}`,
+      type: "website",
+      images: [{ url: image, width: 1200, height: 630, alt: work.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: work.title,
+      description: work.description,
+      images: [image],
+    },
+  };
 }
 
 export default function Work() {

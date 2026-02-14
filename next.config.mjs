@@ -13,8 +13,13 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "www.google.com",
-        pathname: "**",
+        hostname: "logo.clearbit.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.credly.com",
+        pathname: "/**",
       },
     ],
   },

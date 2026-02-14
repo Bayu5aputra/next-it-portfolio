@@ -52,3 +52,26 @@
   --scheme-neutral-600-50: rgba(137,152,159,0.5);
   /*
 }*/
+
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition:
+    background-color 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    fill 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 360ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    backdrop-filter 420ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-switching *,
+  html.theme-switching *::before,
+  html.theme-switching *::after {
+    transition: none !important;
+  }
+}

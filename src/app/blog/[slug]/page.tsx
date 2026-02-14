@@ -12,7 +12,6 @@ import {
   Icon,
   Line,
   Media,
-  Meta,
   Row,
   Schema,
   SmartLink,
@@ -44,13 +43,27 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  return Meta.generate({
+  const image = post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`;
+  const canonical = `${blog.path}/${post.slug}`;
+  return {
     title: post.metadata.title,
     description: post.metadata.summary,
-    baseURL: baseURL,
-    image: post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
-    path: `${blog.path}/${post.slug}`,
-  });
+    alternates: { canonical },
+    openGraph: {
+      title: post.metadata.title,
+      description: post.metadata.summary,
+      url: `${baseURL}${canonical}`,
+      type: "article",
+      publishedTime: post.metadata.publishedAt,
+      images: [{ url: image, width: 1200, height: 630, alt: post.metadata.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.metadata.title,
+      description: post.metadata.summary,
+      images: [image],
+    },
+  };
 }
 
 export default async function Blog({ params }: { params: Promise<{ slug: string | string[] }> }) {

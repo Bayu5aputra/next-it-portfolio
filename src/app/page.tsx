@@ -1,5 +1,5 @@
-import VariableProximity from "@/components/VariableProximity";
 import { PixelTransition } from "@/components/PixelTransition";
+import VariableProximity from "@/components/VariableProximity";
 import { Posts } from "@/components/blog/Posts";
 import { Projects } from "@/components/work/Projects";
 import { about, baseURL, home, person, routes } from "@/resources";
@@ -10,21 +10,33 @@ import {
   Column,
   Heading,
   Line,
-  Meta,
   RevealFx,
   Row,
   Schema,
   Text,
 } from "@once-ui-system/core";
+import Image from "next/image";
+import type { Metadata } from "next";
 
-export async function generateMetadata() {
-  return Meta.generate({
+export async function generateMetadata(): Promise<Metadata> {
+  return {
     title: home.title,
     description: home.description,
-    baseURL: baseURL,
-    path: home.path,
-    image: home.image,
-  });
+    alternates: { canonical: home.path },
+    openGraph: {
+      title: home.title,
+      description: home.description,
+      url: `${baseURL}${home.path}`,
+      type: "website",
+      images: [{ url: home.image, width: 1200, height: 630, alt: home.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: home.title,
+      description: home.description,
+      images: [home.image],
+    },
+  };
 }
 
 export default function Home() {
@@ -69,7 +81,7 @@ export default function Home() {
           <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
             <Heading wrap="balance" variant="display-strong-l">
               <VariableProximity
-                label="Resilient Infrastructure & Intelligent IoT Ecosystems"
+                label="Resilient Networks & Practical IoT Systems"
                 fromWeight={600}
                 toWeight={800}
                 radius={200}
@@ -79,10 +91,10 @@ export default function Home() {
           <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="32">
             <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
               <VariableProximity
-                label="I'm Bayu, an IT Infrastructure Engineer specialized in High Availability Networks, Hybrid Monitoring Systems, and IoT Integration."
-                fromWeight={400}
-                toWeight={600}
-                radius={200}
+                label="I design and operate dependable infrastructure across network reliability, observability, and IoT deployment."
+                fromWeight={300}
+                toWeight={800}
+                radius={260}
               />
             </Text>
           </RevealFx>
@@ -110,51 +122,53 @@ export default function Home() {
                       zIndex: 1,
                     }}
                   >
-                      <PixelTransition
-                        firstContent={
+                    <PixelTransition
+                      firstContent={
+                        <div
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            borderRadius: "50%",
+                            overflow: "hidden",
+                            position: "relative",
+                          }}
+                        >
+                          <Image
+                            src={person.avatar}
+                            alt={person.name}
+                            fill
+                            sizes="2rem"
+                            style={{ objectFit: "cover" }}
+                          />
+                        </div>
+                      }
+                      secondContent={
+                        <div
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            display: "grid",
+                            placeItems: "center",
+                            backgroundColor: "var(--brand-surface-strong)",
+                            borderRadius: "50%",
+                          }}
+                        >
                           <div
                             style={{
-                              width: "100%",
-                              height: "100%",
-                              borderRadius: "50%",
-                              overflow: "hidden",
-                              position: "relative",
+                              fontSize: "0.8rem",
+                              fontWeight: "bold",
+                              color: "var(--brand-on-background-medium)",
                             }}
                           >
-                            <img
-                              src={person.avatar}
-                              alt={person.name}
-                              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                            />
+                            BS
                           </div>
-                        }
-                        secondContent={
-                          <div
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                              display: "grid",
-                              placeItems: "center",
-                              backgroundColor: "var(--brand-surface-strong)",
-                              borderRadius: "50%",
-                            }}
-                          >
-                            <div
-                              style={{
-                                fontSize: "0.8rem",
-                                fontWeight: "bold",
-                                color: "var(--brand-on-background-medium)",
-                              }}
-                            >
-                              BS
-                            </div>
-                          </div>
-                        }
-                        gridSize={4}
-                        pixelColor="var(--brand-surface-strong)"
-                        style={{ width: "100%", height: "100%" }}
-                        aspectRatio="100%"
-                      />
+                        </div>
+                      }
+                      gridSize={4}
+                      pixelColor="var(--brand-surface-strong)"
+                      style={{ width: "100%", height: "100%" }}
+                      aspectRatio="100%"
+                    />
                   </div>
                 )}
                 {about.title}

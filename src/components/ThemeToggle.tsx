@@ -9,13 +9,27 @@ export const ThemeToggle: React.FC = () => {
   const [mounted, setMounted] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("light");
 
+  const animateThemeTransition = () => {
+    if (typeof document === "undefined") return;
+    const root = document.documentElement;
+    root.classList.add("theme-switching");
+    window.setTimeout(() => {
+      root.classList.remove("theme-switching");
+    }, 560);
+  };
+
   useEffect(() => {
     setMounted(true);
     setCurrentTheme(document.documentElement.getAttribute("data-theme") || "light");
   }, []);
 
   useEffect(() => {
-    setCurrentTheme(document.documentElement.getAttribute("data-theme") || "light");
+    if (theme === "system") {
+      setCurrentTheme(document.documentElement.getAttribute("data-theme") || "light");
+      return;
+    }
+
+    setCurrentTheme(theme);
   }, [theme]);
 
   const icon = currentTheme === "dark" ? "light" : "dark";
@@ -24,7 +38,10 @@ export const ThemeToggle: React.FC = () => {
   return (
     <ToggleButton
       prefixIcon={icon}
-      onClick={() => setTheme(nextTheme)}
+      onClick={() => {
+        animateThemeTransition();
+        setTheme(nextTheme);
+      }}
       aria-label={`Switch to ${nextTheme} mode`}
     />
   );

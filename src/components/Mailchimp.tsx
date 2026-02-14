@@ -5,12 +5,15 @@ import { Background, Button, Column, Heading, Input, Row, Text } from "@once-ui-
 import type { SpacingToken, opacity } from "@once-ui-system/core";
 import { useState } from "react";
 
-function debounce<T extends (...args: any[]) => void>(func: T, delay: number): T {
+function debounce<TArgs extends unknown[]>(
+  func: (...args: TArgs) => void,
+  delay: number,
+): (...args: TArgs) => void {
   let timeout: ReturnType<typeof setTimeout>;
-  return ((...args: Parameters<T>) => {
+  return (...args: TArgs) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), delay);
-  }) as T;
+  };
 }
 
 export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
@@ -158,8 +161,8 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
             />
           </div>
           <div id="mce-responses" className="clearfalse">
-            <div className="response" id="mce-error-response" style={{ display: "none" }}></div>
-            <div className="response" id="mce-success-response" style={{ display: "none" }}></div>
+            <div className="response" id="mce-error-response" style={{ display: "none" }} />
+            <div className="response" id="mce-success-response" style={{ display: "none" }} />
           </div>
           <div aria-hidden="true" style={{ position: "absolute", left: "-5000px" }}>
             <input

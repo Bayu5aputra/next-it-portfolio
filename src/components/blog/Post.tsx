@@ -5,6 +5,7 @@ import { person } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import type { PostData } from "@/utils/utils";
 import { Avatar, Column, Row, Text } from "@once-ui-system/core";
+import Image from "next/image";
 import Link from "next/link";
 
 interface PostProps {
@@ -33,10 +34,12 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
               overflow: "hidden",
             }}
           >
-            <img
+            <Image
               src={post.metadata.image}
               alt={`Thumbnail of ${post.metadata.title}`}
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              fill
+              sizes="(min-width: 1024px) 33vw, 100vw"
+              style={{ objectFit: "cover" }}
             />
           </div>
         )}

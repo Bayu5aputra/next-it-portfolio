@@ -1,18 +1,22 @@
 "use client";
 
-import { Footer, Header, Providers, RouteGuard } from "@/components";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { Providers } from "@/components/Providers";
+import { RouteGuard } from "@/components/RouteGuard";
 import { Splash } from "@/components/Splash";
+import type { DataStyleConfig, EffectsConfig, FontsConfig, StyleConfig } from "@/types";
 import {
   Background,
   Column,
   Flex,
-  Meta,
   RevealFx,
   type SpacingToken,
   type opacity,
 } from "@once-ui-system/core";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
+import Script from "next/script";
 import type React from "react";
 import { useEffect, useState } from "react";
 
@@ -24,19 +28,21 @@ export default function ClientLayout({
   effects, // We need effects passed down
 }: {
   children: React.ReactNode;
-  fonts: any;
-  style: any;
-  dataStyle: any;
-  effects: any;
+  fonts: FontsConfig;
+  style: StyleConfig;
+  dataStyle: DataStyleConfig;
+  effects: EffectsConfig;
 }) {
   const pathname = usePathname();
   const [showSplash, setShowSplash] = useState(true);
   const [isContentVisible, setIsContentVisible] = useState(false);
 
   useEffect(() => {
-    // Reset splash state on navigation
-    setShowSplash(true);
-    setIsContentVisible(false);
+    if (pathname) {
+      // Reset splash state on navigation
+      setShowSplash(true);
+      setIsContentVisible(false);
+    }
   }, [pathname]);
 
   const getSplashTitle = () => {
@@ -64,10 +70,8 @@ export default function ClientLayout({
       )}
     >
       <head>
-        <script
-          id="theme-init"
-          dangerouslySetInnerHTML={{
-            __html: `
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`
               (function() {
                 try {
                   const root = document.documentElement;
@@ -118,9 +122,8 @@ export default function ClientLayout({
                   document.documentElement.setAttribute('data-theme', 'dark');
                 }
               })();
-            `,
-          }}
-        />
+            `}
+        </Script>
       </head>
       <Providers>
         <Column

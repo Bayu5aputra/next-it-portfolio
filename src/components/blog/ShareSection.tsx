@@ -82,7 +82,26 @@ export function ShareSection({ title, url }: ShareSectionProps) {
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(url);
+      if (
+        typeof window !== "undefined" &&
+        window.isSecureContext &&
+        navigator.clipboard?.writeText
+      ) {
+        await navigator.clipboard.writeText(url);
+      } else if (typeof document !== "undefined") {
+        const textArea = document.createElement("textarea");
+        textArea.value = url;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+      } else {
+        throw new Error("Clipboard API unavailable");
+      }
       addToast({
         variant: "success",
         message: "Link copied to clipboard",
@@ -108,9 +127,9 @@ export function ShareSection({ title, url }: ShareSectionProps) {
         Share this post:
       </Text>
       <Row data-border="rounded" gap="16" horizontal="center" wrap>
-        {enabledPlatforms.map((platform, index) => (
+        {enabledPlatforms.map((platform) => (
           <Button
-            key={index}
+            key={platform.key}
             variant="secondary"
             size="s"
             href={platform.generateUrl(title, url)}

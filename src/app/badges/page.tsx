@@ -1,21 +1,33 @@
+import { BadgesGrid } from "@/components/badges/BadgesGrid";
 import { badges, baseURL, person } from "@/resources";
-import { Flex, Grid, Heading, Meta, RevealFx, Schema, Text } from "@once-ui-system/core";
-import Link from "next/link";
-import Image from "next/image";
+import { Column, Heading, Line, Row, Schema, Text } from "@once-ui-system/core";
+import type { Metadata } from "next";
 
-export async function generateMetadata() {
-  return Meta.generate({
+export async function generateMetadata(): Promise<Metadata> {
+  const image = `/api/og/generate?title=${encodeURIComponent(badges.title)}`;
+  return {
     title: badges.title,
     description: badges.description,
-    baseURL: baseURL,
-    image: `/api/og/generate?title=${encodeURIComponent(badges.title)}`,
-    path: badges.path,
-  });
+    alternates: { canonical: badges.path },
+    openGraph: {
+      title: badges.title,
+      description: badges.description,
+      url: `${baseURL}${badges.path}`,
+      type: "website",
+      images: [{ url: image, width: 1200, height: 630, alt: badges.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: badges.title,
+      description: badges.description,
+      images: [image],
+    },
+  };
 }
 
 export default function Badges() {
   return (
-    <>
+    <Column maxWidth="m" paddingTop="24" gap="24">
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -29,62 +41,25 @@ export default function Badges() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Flex fillWidth direction="column" horizontal="center" gap="40" paddingY="l">
-        <Flex direction="column" horizontal="center" gap="16">
-          <Heading variant="display-default-xs" style={{ textAlign: "center" }}>
-            {badges.title}
-          </Heading>
-          <Text variant="body-default-l" onBackground="neutral-weak" style={{ textAlign: "center" }}>
-            {badges.description}
-          </Text>
-        </Flex>
 
-        <Grid
-          columns="3"
-          gap="32"
-          s={{ columns: 1 }}
-          m={{ columns: 2 }}
-          fillWidth
-          paddingX="l"
-        >
-          {badges.items.map((badge, index) => (
-            <RevealFx key={badge.title} delay={index * 0.1}>
-              <Link href={badge.link || "#"} target="_blank">
-                <Flex
-                  direction="column"
-                  horizontal="center"
-                  gap="16"
-                  padding="24"
-                  radius="l"
-                  border="neutral-alpha-weak"
-                  background="surface"
-                  style={{
-                    transition: "transform 0.2s",
-                    cursor: "pointer",
-                  }}
-                >
-                  <div style={{ position: "relative", width: "120px", height: "120px" }}>
-                    <Image
-                      src={badge.src}
-                      alt={badge.alt}
-                      fill
-                      style={{ objectFit: "contain" }}
-                    />
-                  </div>
-                  <Flex direction="column" horizontal="center" gap="8">
-                    <Heading variant="heading-strong-s" style={{ textAlign: "center" }}>
-                      {badge.title}
-                    </Heading>
-                    <Text variant="body-default-s" onBackground="neutral-weak">
-                      {badge.issuer}
-                    </Text>
-                  </Flex>
-                </Flex>
-              </Link>
-            </RevealFx>
-          ))}
-        </Grid>
-      </Flex>
-    </>
+      <Row fillWidth paddingRight="64">
+        <Line maxWidth={48} />
+      </Row>
+
+      <Column fillWidth gap="8" paddingX="l">
+        <Heading variant="display-strong-xs" wrap="balance">
+          {badges.title}
+        </Heading>
+        <Text variant="body-default-l" onBackground="neutral-weak">
+          {badges.description}
+        </Text>
+      </Column>
+
+      <BadgesGrid items={badges.items} />
+
+      <Row fillWidth paddingLeft="64" horizontal="end">
+        <Line maxWidth={48} />
+      </Row>
+    </Column>
   );
 }

@@ -14,7 +14,7 @@ export async function GET(request: Request) {
 
     if (resource) {
       const response = await fetch(resource[1]);
-      if (response.status == 200) {
+      if (response.status === 200) {
         return await response.arrayBuffer();
       }
     }
@@ -64,6 +64,7 @@ export async function GET(request: Request) {
         >
           <img
             src={baseURL + person.avatar}
+            alt={person.name}
             style={{
               width: "12rem",
               height: "12rem",

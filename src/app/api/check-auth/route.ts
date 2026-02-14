@@ -1,13 +1,11 @@
-import * as cookie from "cookie";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const cookieHeader = request.headers.get("cookie") || "";
-  const cookies = cookie.parse(cookieHeader);
+  const authToken = request.cookies.get("authToken")?.value;
 
-  if (cookies.authToken === "authenticated") {
+  if (authToken === "authenticated") {
     return NextResponse.json({ authenticated: true }, { status: 200 });
-  } else {
-    return NextResponse.json({ authenticated: false }, { status: 401 });
   }
+
+  return NextResponse.json({ authenticated: false }, { status: 401 });
 }

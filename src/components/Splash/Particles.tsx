@@ -9,7 +9,6 @@ interface ParticlesProps {
   quantity?: number;
   staticity?: number;
   ease?: number;
-  refresh?: boolean;
 }
 
 type Circle = {
@@ -30,7 +29,6 @@ export default function Particles({
   quantity = 30,
   staticity = 50,
   ease = 50,
-  refresh = false,
 }: ParticlesProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -67,11 +65,6 @@ export default function Particles({
       }
     }
   }, [mousePosition.x, mousePosition.y]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    initCanvas();
-  }, [refresh]);
 
   const initCanvas = () => {
     resizeCanvas();
