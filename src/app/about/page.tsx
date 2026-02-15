@@ -17,6 +17,8 @@ import {
 import type { Metadata } from "next";
 import React from "react";
 
+const MAX_VISIBLE_SKILL_TAGS = 10;
+
 export async function generateMetadata(): Promise<Metadata> {
   const image = `/api/og/generate?title=${encodeURIComponent(about.title)}`;
   return {
@@ -368,11 +370,14 @@ export default function About() {
                     </Text>
                     {skill.tags && skill.tags.length > 0 && (
                       <Row wrap gap="8" paddingTop="8">
-                        {skill.tags.map((tag) => (
+                        {skill.tags.slice(0, MAX_VISIBLE_SKILL_TAGS).map((tag) => (
                           <Tag key={`${skill.title}-${tag.name}`} size="l" prefixIcon={tag.icon}>
                             {tag.name}
                           </Tag>
                         ))}
+                        {skill.tags.length > MAX_VISIBLE_SKILL_TAGS && (
+                          <Tag size="l">{`+${skill.tags.length - MAX_VISIBLE_SKILL_TAGS} more`}</Tag>
+                        )}
                       </Row>
                     )}
                     {skill.images && skill.images.length > 0 && (

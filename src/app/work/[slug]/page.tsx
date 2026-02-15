@@ -85,6 +85,28 @@ export default async function Project({
     post.metadata.team?.map((person) => ({
       src: person.avatar,
     })) || [];
+  const coverImage = post.metadata.images[0] || post.metadata.image;
+  const coverImageUrl = coverImage
+    ? coverImage.startsWith("http")
+      ? coverImage
+      : `${baseURL}${coverImage}`
+    : undefined;
+  const projectStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: post.metadata.title,
+    description: post.metadata.summary,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    url: `${baseURL}${work.path}/${post.slug}`,
+    datePublished: post.metadata.publishedAt,
+    author: {
+      "@type": "Person",
+      name: person.name,
+      url: `${baseURL}${about.path}`,
+    },
+    image: coverImageUrl,
+  };
 
   return (
     <Column as="section" maxWidth="m" horizontal="center" gap="l">
@@ -104,6 +126,10 @@ export default async function Project({
           url: `${baseURL}${about.path}`,
           image: `${baseURL}${person.avatar}`,
         }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectStructuredData) }}
       />
       <Column maxWidth="s" gap="16" horizontal="center" align="center">
         <SmartLink href="/work">

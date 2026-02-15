@@ -10,7 +10,7 @@ const person: Person = {
   email: "bayusaputra.005.003@gmail.com",
   location: "Bekasi, West Java",
   timeZone: "Asia/Jakarta",
-  languages: ["Bahasa Indonesia", "English"],
+  languages: ["Indonesian", "English"],
 };
 
 const newsletter: Newsletter = {
@@ -113,7 +113,7 @@ const about: About = {
     experiences: [
       {
         company: "Sinar Mas Land",
-        timeframe: "Nov 2025 – Present",
+        timeframe: "Nov 2025 - Present",
         role: "IT Infrastructure Engineer",
         achievements: [
           "Operate multi-site network infrastructure with ICCC, ITMS, and The Dude for daily service visibility.",
@@ -125,7 +125,7 @@ const about: About = {
       },
       {
         company: "Sinar Mas Land",
-        timeframe: "Sep 2025 – Nov 2025",
+        timeframe: "Sep 2025 - Nov 2025",
         role: "IT Infrastructure Internship",
         achievements: [
           "Diagnosed and maintained ATCS devices and supporting IoT sensors in field operations.",
@@ -135,7 +135,7 @@ const about: About = {
       },
       {
         company: "Damai Putra Group",
-        timeframe: "Dec 2024 – Jun 2025",
+        timeframe: "Dec 2024 - Jun 2025",
         role: "IT Support Internship",
         achievements: [
           "Supported hardware, software, and connectivity troubleshooting across office operations.",
@@ -145,7 +145,7 @@ const about: About = {
       },
       {
         company: "BAZNAS",
-        timeframe: "Nov 2024 – Dec 2024",
+        timeframe: "Nov 2024 - Dec 2024",
         role: "Web Development Internship",
         achievements: [
           "Developed a Zakat reporting dashboard with Looker Studio and supported a web-based email broadcast system.",
@@ -154,7 +154,7 @@ const about: About = {
       },
       {
         company: "Kominfo",
-        timeframe: "Oct 2024 – Nov 2024",
+        timeframe: "Oct 2024 - Nov 2024",
         role: "Network Technician Internship",
         achievements: [
           "Maintained internet connectivity and assisted LAN cabling deployment.",
@@ -174,7 +174,7 @@ const about: About = {
           <>
             Bachelor of Computer Science, GPA 3.76/4.00
             <br />
-            Sep 2021 – Aug 2025
+            Sep 2021 - Aug 2025
             <br />
             Relevant courses: Network Administration, Computer Architecture, Operating Systems, Web
             and Android Development.
@@ -222,9 +222,13 @@ const about: About = {
         tags: [
           { name: "Cisco", icon: "globe" },
           { name: "MikroTik", icon: "globe" }, // generic icon
+          { name: "Fortinet", icon: "globe" },
+          { name: "Sophos", icon: "globe" },
           { name: "Fiber Optics", icon: "grid" },
           { name: "VoIP", icon: "grid" },
           { name: "ATCS", icon: "grid" },
+          { name: "LAN/WAN", icon: "grid" },
+          { name: "Firewall", icon: "grid" },
         ],
         images: [],
       },
@@ -235,11 +239,19 @@ const about: About = {
         ),
         tags: [
           { name: "Linux", icon: "linux" },
-          { name: "Windows Server", icon: "person" },
+          { name: "Ubuntu", icon: "linux" },
+          { name: "Debian", icon: "linux" },
+          { name: "Windows Server", icon: "globe" },
           { name: "IoT", icon: "grid" },
           { name: "Grafana", icon: "grid" },
+          { name: "Uptime Kuma", icon: "grid" },
           { name: "Docker", icon: "grid" },
+          { name: "Apache", icon: "grid" },
+          { name: "Nginx", icon: "grid" },
           { name: "ICCC / ITMS / The Dude", icon: "grid" },
+          { name: "ESP32", icon: "grid" },
+          { name: "MQTT", icon: "grid" },
+          { name: "Arduino", icon: "grid" },
           { name: "Incident SLA P1-P4", icon: "grid" },
         ],
         images: [],
@@ -253,14 +265,21 @@ const about: About = {
           </>
         ),
         tags: [
-          { name: "Flutter", icon: "person" },
-          { name: "Java", icon: "person" },
-          { name: "Python", icon: "person" },
+          { name: "Flutter", icon: "javascript" },
+          { name: "Dart", icon: "javascript" },
+          { name: "Java", icon: "javascript" },
+          { name: "Python", icon: "javascript" },
           { name: "JavaScript", icon: "javascript" },
-          { name: "HTML", icon: "person" },
-          { name: "CSS", icon: "person" },
-          { name: "PHP", icon: "person" },
-          { name: "C++", icon: "person" },
+          { name: "React", icon: "javascript" },
+          { name: "HTML", icon: "javascript" },
+          { name: "CSS", icon: "javascript" },
+          { name: "Tailwind CSS", icon: "javascript" },
+          { name: "Bootstrap", icon: "javascript" },
+          { name: "jQuery", icon: "javascript" },
+          { name: "PHP", icon: "javascript" },
+          { name: "Laravel", icon: "javascript" },
+          { name: "CodeIgniter", icon: "javascript" },
+          { name: "C++", icon: "javascript" },
         ],
         images: [],
       },
@@ -273,9 +292,17 @@ const about: About = {
         ),
         tags: [
           { name: "MariaDB", icon: "grid" },
+          { name: "MySQL", icon: "grid" },
           { name: "Oracle Database", icon: "grid" },
           { name: "Microsoft SQL Server", icon: "grid" },
+          { name: "SQLite", icon: "grid" },
           { name: "Firebase", icon: "grid" },
+          { name: "NumPy", icon: "grid" },
+          { name: "npm", icon: "grid" },
+          { name: "Git", icon: "grid" },
+          { name: "GitHub", icon: "github" },
+          { name: "Figma", icon: "grid" },
+          { name: "Canva", icon: "grid" },
         ],
         images: [],
       },
@@ -344,8 +371,8 @@ const badges: Badges = {
     },
     {
       src: "https://assets.cdn.dicoding.com/original/commons/certificate_logo.png",
-      alt: "Belajar Dasar-Dasar DevOps",
-      title: "Belajar Dasar-Dasar DevOps",
+      alt: "DevOps Fundamentals",
+      title: "DevOps Fundamentals",
       issuer: "Dicoding Indonesia",
       issued: "Sep 2024",
       expires: "Sep 2027",
@@ -370,7 +397,7 @@ const badges: Badges = {
       issuer: "Digital Talent Scholarship",
       issued: "Feb 2024",
       credentialId: "19374231150-32",
-      skills: ["Network Architecture", "Pengelolaan Jaringan", "+4 skills"],
+      skills: ["Network Architecture", "Network Administration", "+4 skills"],
       link: "https://digitalent.komdigi.go.id/",
       invertInDark: true,
     },
@@ -381,7 +408,7 @@ const badges: Badges = {
       issuer: "Digital Talent Scholarship",
       issued: "Jun 2023",
       credentialId: "1936551860-25",
-      skills: ["Pengembangan Aplikasi", "HTML", "+5 skills"],
+      skills: ["Application Development", "HTML", "+5 skills"],
       link: "https://digitalent.komdigi.go.id/",
       invertInDark: true,
     },
@@ -391,7 +418,7 @@ const badges: Badges = {
       title: "Java Programming",
       issuer: "Oracle",
       issued: "Aug 2023",
-      skills: ["Java", "Pengembangan Aplikasi", "+1 skill"],
+      skills: ["Java", "Application Development", "+1 skill"],
     },
     {
       src: "https://images.credly.com/size/680x680/images/f4ccdba9-dd65-4349-baad-8f05df116443/CCNASRWE__1_.png",
@@ -408,7 +435,7 @@ const badges: Badges = {
       title: "CCNA: Introduction to Networks",
       issuer: "Cisco",
       issued: "Sep 2023",
-      skills: ["Cisco Routers", "Pengelolaan Jaringan", "+1 skill"],
+      skills: ["Cisco Routers", "Network Administration", "+1 skill"],
       link: "https://www.credly.com/badges/2c1220c3-1c21-43b8-9f26-a07cafdbaaae/public_url",
     },
     {
@@ -417,7 +444,7 @@ const badges: Badges = {
       title: "Java Fundamental",
       issuer: "Oracle",
       issued: "Feb 2023",
-      skills: ["Java", "Pemrograman Berorientasi Objek (OOP)"],
+      skills: ["Java", "Object-Oriented Programming (OOP)"],
     },
     {
       src: "https://images.credly.com/size/680x680/images/04e8034c-81f5-4f7f-ab23-e8b428c31ce9/ITE.png",
