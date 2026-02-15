@@ -72,6 +72,9 @@ export async function generateMetadata(): Promise<Metadata> {
     authors: [{ name: "Bayu Saputra", url: `${baseURL}/about` }],
     creator: "Bayu Saputra",
     publisher: "Bayu Saputra",
+    verification: {
+      google: "0_XdOOd5v15deDtUtoUwoKqJwo5h9nwHKyMY4IAJZEo",
+    },
     icons: {
       icon: "/icon.jpg",
       apple: "/apple-icon.jpg",

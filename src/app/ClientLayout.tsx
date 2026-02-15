@@ -20,6 +20,7 @@ import Script from "next/script";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function ClientLayout({
   children,
@@ -202,6 +203,7 @@ export default function ClientLayout({
             <Footer />
           </Flex>
           <Analytics />
+          <SpeedInsights />
         </Column>
       </Providers>
     </Flex>
