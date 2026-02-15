@@ -42,7 +42,7 @@ const social: Social = [
 
 const home: Home = {
   path: "/",
-  image: "/images/og/home.jpg",
+  image: "/images/og/home.png",
   label: "Home",
   title: `${person.name} | IT Infrastructure Engineer Portfolio`,
   description: "IT Infrastructure Engineer portfolio focused on network reliability, observability, and IoT operations in Indonesia.",
