@@ -13,8 +13,8 @@ import type {
 } from "@/types";
 import { home } from "./index";
 
-// IMPORTANT: Replace with your own domain address - it's used for SEO in meta tags and schema
-const baseURL: string = "https://next-it.my.id";
+// Canonical URL for this portfolio (hosted on Vercel via cPanel subdomain CNAME)
+const baseURL: string = "https://portfolio.next-it.my.id";
 
 const routes: RoutesConfig = {
   "/": true,

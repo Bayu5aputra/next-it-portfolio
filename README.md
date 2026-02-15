@@ -1,66 +1,110 @@
-# Next-IT Portfolio: Bayu Saputra
+# Next-IT Portfolio
 
-A cutting-edge portfolio for an **IT Infrastructure Engineer**, redesigned by **Bayu Saputra**.
+Personal portfolio website for **Bayu Saputra**, focused on IT Infrastructure Engineering, Network Operations, and IoT Systems.
 
-This project is a unique fusion of two distinct UI philosophies: the **Magic Portfolio** structural template merged with the immersive **Chronark** introduction animation. It features custom-built interactive typography and a high-performance, minimalist aesthetic tailored for showcasing infrastructure and engineering expertise.
+## Live Website
 
-![Next-IT Portfolio](public/images/og/home.jpg)
+- Production: https://portfolio.next-it.my.id/
 
-## 🚀 Key Features
+## Domain Setup
 
-### 1. The "Chronark" Splash Screen
-A seamless port of the iconic Chronark introduction animation.
-- **Particle System:** Canvas-based particle rendering.
-- **Dynamic Routing:** Splash screen titles change dynamically based on the current page (e.g., "About", "Work").
-- **Smart Transition:** Smooth fade-out sequence that perfectly synchronizes with the main content reveal.
+- Main domain: `next-it.my.id` (different website/project)
+- Portfolio domain: `portfolio.next-it.my.id` (this project)
+- Hosting model:
+  - App is deployed on Vercel
+  - `portfolio.next-it.my.id` is connected using a cPanel DNS CNAME to Vercel
 
-### 2. Interactive Typography
-Custom-engineered text animations that react to user interaction:
-- **True Focus (Header):** A "flashlight" effect applied to the Location and Time display. Moving your mouse reveals sharp text through a blur filter using CSS masking.
-- **Variable Proximity (Home):** A sophisticated font-weight interpolation effect applied to the Headline and Subline. Characters swell and bold individually as the cursor approaches, creating a fluid, wave-like interaction without disrupting layout.
+For SEO and canonical consistency, this repository uses `https://portfolio.next-it.my.id` as its base URL.
 
-### 3. IT Infrastructure Branding
-- **Content:** Tailored specifically for High Availability Networks, IoT Integration, and Hybrid Monitoring Systems.
-- **Aesthetics:** Clean, dark-mode centric design with "cyber-physical" vibes suitable for an engineer dealing with sensors and fiber optics.
-- **Hidden Scrollbar:** Global CSS override to maintain a sleek, app-like feel (`::-webkit-scrollbar { display: none }`).
+## Overview
 
-## 🛠️ Tech Stack
+This project is built on top of the Once UI Magic Portfolio base and customized for infrastructure-focused storytelling:
 
-- **Framework:** [Next.js](https://nextjs.org) (App Router)
-- **UI System:** [Once UI](https://once-ui.com)
-- **Styling:** SCSS Modules & Custom CSS Variables
-- **Animations:** Canvas API (Particles) & Native React Hooks (`requestAnimationFrame`)
+- Professional profile and work history
+- Certifications and badges page
+- Project and blog sections powered by MDX
+- Interactive homepage typography and splash transition
+- SEO-focused metadata, sitemap, robots, RSS, and structured data
 
-## 🏁 Getting Started
+## Core Features
 
-**1. Clone the repository**
-```bash
-git clone https://github.com/Bayu5aputra/next-it-portfolio.git
+- Custom splash intro with smooth page transition
+- Variable proximity typography interaction on homepage
+- Dedicated pages:
+  - Home
+  - About
+  - Work
+  - Blog
+  - Badges (Licenses and Certifications)
+- Structured SEO setup:
+  - Open Graph and Twitter metadata
+  - `robots.txt`
+  - `sitemap.xml`
+  - `manifest.webmanifest`
+  - `llms.txt`
+  - JSON-LD on key pages
+
+## Tech Stack
+
+- Framework: Next.js (App Router)
+- Language: TypeScript
+- UI: Once UI
+- Styling: SCSS Modules + custom CSS
+- Content: MDX
+- Icons: react-icons
+- Analytics: @vercel/analytics
+
+## Project Structure
+
+```txt
+src/
+  app/                # App Router pages and route handlers
+  components/         # UI and feature components
+  resources/          # Site content and global config
+  types/              # TypeScript types
+  utils/              # Utilities
+public/
+  images/             # Local images and assets
 ```
 
-**2. Install dependencies**
+## Getting Started
+
+1. Install dependencies
+
 ```bash
 npm install
 ```
 
-**3. Run development server**
+2. Run development server
+
 ```bash
 npm run dev
 ```
 
-## 📂 Customization
+3. Build for production
 
-- **Config:** Edit `src/resources/once-ui.config.ts` for global settings.
-- **Content:** Edit `src/resources/content.tsx` to update bio, experience, and skills.
-- **Animations:**
-  - `src/components/Splash`: Chronark intro logic.
-  - `src/components/TrueFocus.tsx`: Flashlight blur effect.
-  - `src/components/VariableProximity.tsx`: Font weight interaction.
+```bash
+npm run build
+```
 
-## 📄 License
+4. Run production server
 
-Based on the [Magic Portfolio](https://github.com/once-ui-system/magic-portfolio) template by Once UI.
-Distributed under the **CC BY-NC 4.0 License**.
+```bash
+npm run start
+```
 
----
-*Redesigned by Bayu Saputra*
+## Configuration
+
+- Main site config: `src/resources/once-ui.config.ts`
+- Main content data: `src/resources/content.tsx`
+- Next config: `next.config.mjs`
+
+## Notes
+
+- Some badge/logo assets are loaded from external sources to reduce repository size.
+- If deploying to static-only hosting, server routes (`/api/*`) must be removed or replaced first.
+
+## License
+
+Based on the Magic Portfolio template from Once UI.
+Original template license and attribution remain applicable.
