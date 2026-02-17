@@ -12,25 +12,8 @@ team:
 link: "https://github.com/bayusaputraa/Emergency-Alert-System"
 ---
 
-## Overview
+I built an IoT-based emergency button system to reduce delay in incident detection and make escalation more reliable. The solution connects ESP32 hardware to a Laravel API and a real-time dashboard so operators can see urgent events as soon as they occur.
 
-Developed a comprehensive **IoT Emergency Button System** designed to provide immediate alerts in critical situations. The system integrates hardware (ESP32) with a robust software backend to ensure reliable message delivery and real-time monitoring.
+My role covered device integration, backend event handling, and dashboard delivery. I translated the core operational problem into a simple hypothesis: if emergency reporting is triggered automatically from hardware and displayed instantly in a central interface, response initiation becomes faster and more consistent than manual reporting.
 
-## Key Features
-
-- **Hardware Integration**: Utilized **ESP32** microcontrollers coupled with physical push buttons to trigger alerts.
-- **Real-time Communication**: Implemented **MQTT** protocol for low-latency messaging between the device and the server.
-- **Backend API**: Built a RESTful API using **Laravel** to handle device authentication, alert logging, and data persistence.
-- **Live Dashboard**: Created a real-time dashboard to display active alerts, device status, and location data for emergency responders.
-
-## Technical Stack
-
-- **Hardware**: ESP32, Physical Buttons, WiFi Module
-- **Protocol**: MQTT (Message Queuing Telemetry Transport)
-- **Backend**: Laravel (PHP), MySQL
-- **Frontend**: Blade Templates, JavaScript
-
-## Outcome
-
-The system successfully demonstrated sub-second latency for alert transmission, providing a reliable proof-of-concept for safety and security applications in office buildings and public spaces.
-
+To validate the design, I mapped operator needs, defined critical event fields such as location and timestamp, and tested repeated triggers, reconnect behavior, and end-to-end delivery from device to dashboard. The main constraints were WiFi stability and false triggers, so reliability safeguards were prioritized over feature expansion. This project strengthened my end-to-end thinking across firmware, API, and operational monitoring, and provides a solid base for future enhancements such as acknowledgement flows and multi-channel notifications.

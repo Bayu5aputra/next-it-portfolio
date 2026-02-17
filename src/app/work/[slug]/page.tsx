@@ -166,7 +166,7 @@ export default async function Project({
           src={post.metadata.images[0]}
         />
       )}
-      <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
+      <Column style={{ margin: "auto", textAlign: "justify" }} as="article" maxWidth="xs">
         <CustomMDX source={post.content} />
       </Column>
       <Column fillWidth gap="40" horizontal="center" marginTop="40">

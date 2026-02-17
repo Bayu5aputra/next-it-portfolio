@@ -80,7 +80,7 @@ const about: About = {
   path: "/about",
   label: "About",
   title: `About - ${person.name}`,
-  description: `${person.name} is an IT Infrastructure Engineer based in ${person.location}, specializing in network and IoT operations.`,
+  description: `${person.name} is an IT Infrastructure Engineer based in ${person.location}, specializing in multi-site network operations, hybrid monitoring, and IoT reliability.`,
   tableOfContent: {
     display: true,
     subItems: false,
@@ -94,16 +94,14 @@ const about: About = {
   },
   intro: {
     display: true,
-    title: "Introduction",
+    title: "About & Case Study Method",
     description: (
       <>
-        I am an Informatics Engineering graduate from Bani Saleh University (GPA 3.76/4.00),
-        currently working in IT infrastructure operations. My daily focus is maintaining stable
-        connectivity, monitoring critical services, and keeping field devices operational.
-        <br />
-        <br />I work comfortably from Layer 1 and Layer 2 troubleshooting up to service monitoring
-        and incident coordination. I value clear communication, practical documentation, and
-        solutions that are reliable over time, not just quick fixes.
+        I'm an IT Infrastructure Engineer at Sinar Mas Land, focused on multi-site network
+        operations, hybrid monitoring (ICCC, ITMS, The Dude), and improving IoT reliability for
+        environmental sensors and CCTV systems. I handle SLA-based incidents (P1-P4), troubleshoot
+        fiber backbone connectivity, and translate technical findings into clear actions that
+        improve uptime.
       </>
     ),
   },
@@ -116,10 +114,13 @@ const about: About = {
         timeframe: "Nov 2025 - Present",
         role: "IT Infrastructure Engineer",
         achievements: [
-          "Operate multi-site network infrastructure with ICCC, ITMS, and The Dude for daily service visibility.",
-          "Handle Layer 1 and Layer 2 troubleshooting on fiber and access network segments.",
-          "Maintain IoT endpoints including environmental sensors and CCTV across operational areas.",
-          "Perform preventive maintenance and root cause analysis for P1-P4 incidents within SLA targets.",
+          "Orchestrate multi-site network operations with hybrid monitoring, ICCC and ITMS for high-level visibility, and The Dude for granular device health.",
+          "Resolve Layer 1 and Layer 2 issues across fiber backbone and access segments, including blind-spot devices such as Unit Master Controllers and VoIP endpoints.",
+          "Manage field IoT ecosystem reliability for flood sensors, soil movement sensors, rain meters, and CCTV network components.",
+          "Lead preventive maintenance and root cause analysis to detect abnormalities early, including NVR storage constraints and recurrent offline devices.",
+          "Direct SLA-based incident handling from Critical P1 to Low P4, and apply Stop the Clock controls for external dependencies to keep uptime accounting fair and auditable.",
+          "Prepare technical reporting for management on inventory status, service performance, and vendor compliance risks.",
+          "Supported engineering recruitment process from junior to lead-level candidates to strengthen team delivery capacity.",
         ],
         images: [],
       },
@@ -128,8 +129,11 @@ const about: About = {
         timeframe: "Sep 2025 - Nov 2025",
         role: "IT Infrastructure Internship",
         achievements: [
-          "Diagnosed and maintained ATCS devices and supporting IoT sensors in field operations.",
-          "Built a monitoring dashboard stack using Grafana and Docker for clearer operational tracking.",
+          "Diagnosed ATCS (Area Traffic Control System) malfunctions and performed repair and maintenance for hardware and system components.",
+          "Handled ATCS-related support tickets and coordinated repair progress with field operations.",
+          "Maintained field IoT devices, including flood sensors, soil sensors, and rain meters.",
+          "Developed and implemented ATCS monitoring with Grafana and Docker to improve detection speed and operational visibility.",
+          "Completed foundational training for ATCS and IoT device management workflows.",
         ],
         images: [],
       },
@@ -138,8 +142,11 @@ const about: About = {
         timeframe: "Dec 2024 - Jun 2025",
         role: "IT Support Internship",
         achievements: [
-          "Supported hardware, software, and connectivity troubleshooting across office operations.",
-          "Assisted LAN/WAN, VPN, firewall, server administration, and Active Directory maintenance.",
+          "Identified, analyzed, and resolved technical issues across hardware, software, and enterprise network systems.",
+          "Configured and maintained LAN/WAN, VPN, and firewall controls to sustain network stability and security.",
+          "Supported Windows and Linux servers, Active Directory administration, and backup operations.",
+          "Delivered user support and basic technical training to minimize downtime and increase service quality.",
+          "Contributed to IT security implementation, threat analysis, asset management, and technical documentation.",
         ],
         images: [],
       },
@@ -148,7 +155,9 @@ const about: About = {
         timeframe: "Nov 2024 - Dec 2024",
         role: "Web Development Internship",
         achievements: [
-          "Developed a Zakat reporting dashboard with Looker Studio and supported a web-based email broadcast system.",
+          "Built a Zakat, Infak, and Sedekah monitoring dashboard in Looker Studio for collection visibility and reporting.",
+          "Developed a web-based email broadcast system to support donor and beneficiary communications.",
+          "Contributed to digital communication strategy and helped improve internal network reliability for daily operations.",
         ],
         images: [],
       },
@@ -157,8 +166,10 @@ const about: About = {
         timeframe: "Oct 2024 - Nov 2024",
         role: "Network Technician Internship",
         achievements: [
-          "Maintained internet connectivity and assisted LAN cabling deployment.",
-          "Configured basic network security controls including DHCP snooping and rogue DHCP mitigation.",
+          "Maintained internet connectivity by diagnosing and resolving network performance issues across operational units.",
+          "Installed LAN cabling from switches to user workstations to improve distribution stability.",
+          "Configured network security controls, including firewall policy, DHCP snooping, and rogue DHCP mitigation.",
+          "Monitored throughput and resolved speed degradation to sustain service quality.",
         ],
         images: [],
       },
@@ -176,8 +187,8 @@ const about: About = {
             <br />
             Sep 2021 - Aug 2025
             <br />
-            Relevant courses: Network Administration, Computer Architecture, Operating Systems, Web
-            and Android Development.
+            Relevant courses: Network Administration, Computer Architecture, Operating Systems,
+            Computer Networks, Web Programming, and Android Programming.
           </>
         ),
       },
@@ -192,10 +203,10 @@ const about: About = {
         timeframe: "Feb 2024 - Feb 2025",
         role: "Leader of HMTI",
         achievements: [
-          "Led and coordinated 57 members to execute organization programs from planning to evaluation.",
-          "Monitored team performance, aligned responsibilities, and ensured each division met its targets.",
-          "Built active communication channels with Informatics Engineering students to capture real needs.",
-          "Established collaboration with other student organizations for cross-event execution.",
+          "Led and coordinated 57 members in executing annual programs from planning through evaluation.",
+          "Monitored team performance, aligned responsibilities across divisions, and ensured delivery against targets.",
+          "Built communication channels with Informatics Engineering students to capture operational needs and feedback.",
+          "Established collaboration with other student organizations for cross-committee program execution.",
         ],
       },
       {
@@ -203,9 +214,9 @@ const about: About = {
         timeframe: "Nov 2022 - Jan 2024",
         role: "Member of Publications, Documentation, and Decoration",
         achievements: [
-          "Produced and edited event documentation (photo, video, design assets) for publication quality.",
-          "Designed promotional materials including posters, banners, and digital campaign assets.",
-          "Supported MAESTRO 2023 execution for the Faculty of Information and Digital Technology with committee coordination.",
+          "Edited and curated event documentation assets, photo, video, and design content, to maintain publication quality and visual consistency.",
+          "Designed promotional materials including posters, banners, brochures, and digital campaign assets.",
+          "Supported MAESTRO 2023 committee execution for the Faculty of Information and Digital Technology.",
         ],
       },
     ],
@@ -217,11 +228,14 @@ const about: About = {
       {
         title: "Networking & Infrastructure",
         description: (
-          <>Router and switch configuration, network troubleshooting, and LAN/WAN operations.</>
+          <>
+            Router and switch configuration, fiber troubleshooting, and resilient LAN/WAN operations
+            for multi-site environments.
+          </>
         ),
         tags: [
           { name: "Cisco", icon: "globe" },
-          { name: "MikroTik", icon: "globe" }, // generic icon
+          { name: "MikroTik", icon: "globe" },
           { name: "Fortinet", icon: "globe" },
           { name: "Sophos", icon: "globe" },
           { name: "Fiber Optics", icon: "grid" },
@@ -235,7 +249,10 @@ const about: About = {
       {
         title: "Systems, Monitoring & IoT",
         description: (
-          <>Hybrid monitoring operations, server administration, and field IoT device management.</>
+          <>
+            Hybrid monitoring operations, reliability engineering, and field IoT device management
+            across critical service areas.
+          </>
         ),
         tags: [
           { name: "Linux", icon: "linux" },
@@ -260,8 +277,8 @@ const about: About = {
         title: "Programming & Automation",
         description: (
           <>
-            Application development and scripting for automation, integration, and operational
-            tooling.
+            Application development and scripting for automation, integration, and infrastructure
+            support tooling.
           </>
         ),
         tags: [
@@ -287,7 +304,8 @@ const about: About = {
         title: "Database & Platform Tools",
         description: (
           <>
-            Hands-on database usage for app backends, reporting, and operational support workflows.
+            Practical database and platform tooling for app backends, reporting, and operational
+            support workflows.
           </>
         ),
         tags: [
@@ -297,7 +315,7 @@ const about: About = {
           { name: "Microsoft SQL Server", icon: "grid" },
           { name: "SQLite", icon: "grid" },
           { name: "Firebase", icon: "grid" },
-          { name: "NumPy", icon: "grid" },
+          { name: "Looker Studio", icon: "grid" },
           { name: "npm", icon: "grid" },
           { name: "Git", icon: "grid" },
           { name: "GitHub", icon: "github" },
@@ -310,7 +328,7 @@ const about: About = {
         title: "Professional Skills",
         description: (
           <>
-            Strong execution under pressure with clear communication, ownership, and team
+            Strong execution under pressure with clear communication, ownership, and cross-team
             collaboration.
           </>
         ),
@@ -322,6 +340,7 @@ const about: About = {
           { name: "Time Management", icon: "person" },
           { name: "Technical Documentation", icon: "person" },
           { name: "Root Cause Analysis", icon: "person" },
+          { name: "Leadership", icon: "person" },
         ],
         images: [],
       },
