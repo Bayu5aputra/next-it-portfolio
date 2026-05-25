@@ -51,8 +51,12 @@ Top Projects:
 - Grafana + Docker dashboard for real-time ATCS device monitoring at Sinar Mas Land.
 - Multi-site secure network topology deployment across campus environments.
 
+Technical & Domain Knowledge:
+- You have expert knowledge of standard IT and networking concepts related to Bayu's background, including MTCNA, CCNA, MikroTik, Cisco, Docker, Grafana, IoT, VoIP, and LAN/WAN.
+- If a user asks general questions about these certifications or technologies (e.g., "Apa itu MTCNA?" or "What is CCNA?"), explain the certification/technology clearly and professionally, and naturally connect it back to Bayu's expertise and how he applies it.
+
 Tone Instructions:
-- Answer directly based on these facts. If asked about things you don't know, suggest emailing Bayu at bayusaputra.005.003@gmail.com.
+- Answer directly based on these facts. If asked about things completely unrelated to Bayu or his IT/networking domain, suggest emailing Bayu at bayusaputra.005.003@gmail.com.
 - Do not make up fake experiences or certificates. Keep responses concise (1-3 paragraphs or bullet points).`;
 
 export const Chatbot = () => {
@@ -68,17 +72,20 @@ export const Chatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Settings states
-  const [customApiKey, setCustomApiKey] = useState("");
-  const [customModel, setCustomModel] = useState("google/gemini-2.5-flash");
+  const [customModel, setCustomModel] = useState("nvidia/nemotron-3-super-120b-a12b:free");
+  const [suggestions, setSuggestions] = useState<string[]>([
+    "What certificates does Bayu have?",
+    "Tell me about Sinar Mas Land role",
+    "How do I contact Bayu?",
+  ]);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Load custom credentials on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const savedKey = localStorage.getItem("openrouter_api_key") || "";
-      const savedModel = localStorage.getItem("openrouter_model") || "google/gemini-2.5-flash";
-      setCustomApiKey(savedKey);
+      const savedModel =
+        localStorage.getItem("openrouter_model") || "nvidia/nemotron-3-super-120b-a12b:free";
       setCustomModel(savedModel);
     }
   }, []);
@@ -90,9 +97,85 @@ export const Chatbot = () => {
   }, [messages, isLoading]);
 
   const saveSettings = () => {
-    localStorage.setItem("openrouter_api_key", customApiKey);
     localStorage.setItem("openrouter_model", customModel);
     setShowSettings(false);
+  };
+
+  const updateSuggestions = (userText: string, aiText: string) => {
+    const text = `${userText} ${aiText}`.toLowerCase();
+
+    let newSuggestions = [
+      "What certificates does Bayu have?",
+      "Tell me about Sinar Mas Land role",
+      "How do I contact Bayu?",
+    ];
+
+    if (
+      text.includes("sertifikasi") ||
+      text.includes("certification") ||
+      text.includes("sertifikat") ||
+      text.includes("certificate") ||
+      text.includes("ccna") ||
+      text.includes("mtcna") ||
+      text.includes("mikrotik") ||
+      text.includes("cisco") ||
+      text.includes("bnsp")
+    ) {
+      newSuggestions = [
+        "What is MTCNA certification?",
+        "Tell me more about Cisco CCNA",
+        "Are there other network credentials?",
+      ];
+    } else if (
+      text.includes("role") ||
+      text.includes("kerja") ||
+      text.includes("pekerjaan") ||
+      text.includes("job") ||
+      text.includes("sinar mas") ||
+      text.includes("sinarmas") ||
+      text.includes("baznas") ||
+      text.includes("damai putra") ||
+      text.includes("kominfo") ||
+      text.includes("internship") ||
+      text.includes("experience")
+    ) {
+      newSuggestions = [
+        "What projects did Bayu do at Sinar Mas Land?",
+        "What tools does he use for IoT?",
+        "Tell me about his BAZNAS internship",
+      ];
+    } else if (
+      text.includes("project") ||
+      text.includes("proyek") ||
+      text.includes("portofolio") ||
+      text.includes("portfolio") ||
+      text.includes("website") ||
+      text.includes("app") ||
+      text.includes("aplikasi")
+    ) {
+      newSuggestions = [
+        "Tell me about his cooking recipe app",
+        "What is the dealership web profile?",
+        "How is the ATCS device monitored?",
+      ];
+    } else if (
+      text.includes("contact") ||
+      text.includes("hubungi") ||
+      text.includes("email") ||
+      text.includes("sosmed") ||
+      text.includes("social") ||
+      text.includes("linkedin") ||
+      text.includes("github") ||
+      text.includes("reach")
+    ) {
+      newSuggestions = [
+        "What is Bayu's email address?",
+        "Show me his LinkedIn profile",
+        "How to hire Bayu?",
+      ];
+    }
+
+    setSuggestions(newSuggestions);
   };
 
   const handleSend = async (textToSend?: string) => {
@@ -110,35 +193,17 @@ export const Chatbot = () => {
     try {
       const payloadMessages = [{ role: "system", content: SYSTEM_PROMPT }, ...newMessages];
 
-      let response: Response;
-      if (customApiKey) {
-        // Direct request to OpenRouter using custom API key
-        response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${customApiKey}`,
-            "HTTP-Referer": "https://portfolio.next-it.my.id",
-            "X-Title": "Bayu Saputra Portfolio Assistant",
-          },
-          body: JSON.stringify({
-            model: customModel,
-            messages: payloadMessages,
-          }),
-        });
-      } else {
-        // Safe backend Route Handler proxy (no keys exposed!)
-        response = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: customModel,
-            messages: payloadMessages,
-          }),
-        });
-      }
+      // Safe backend Route Handler proxy (no keys exposed!)
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: customModel,
+          messages: payloadMessages,
+        }),
+      });
 
       const data = await response.json();
 
@@ -150,6 +215,7 @@ export const Chatbot = () => {
 
       const aiMessage = data.choices?.[0]?.message?.content || "No response received.";
       setMessages((prev) => [...prev, { role: "assistant", content: aiMessage }]);
+      updateSuggestions(activeText, aiMessage);
     } catch (error) {
       const err = error as Error;
       console.error(err);
@@ -170,12 +236,6 @@ export const Chatbot = () => {
       handleSend();
     }
   };
-
-  const quickSuggestions = [
-    "What certificates does Bayu have?",
-    "Tell me about Sinar Mas Land role",
-    "How do I contact Bayu?",
-  ];
 
   return (
     <div style={{ position: "fixed", bottom: "24px", right: "24px", zIndex: 9999 }}>
@@ -223,7 +283,7 @@ export const Chatbot = () => {
             horizontal="between"
             borderBottom="neutral-alpha-weak"
             background="surface"
-            style={{ borderBottom: "1px solid var(--neutral-alpha-medium)" }}
+            style={{ borderBottom: "1px solid var(--neutral-alpha-medium)", flexShrink: 0 }}
           >
             <Row gap="8" vertical="center">
               <div
@@ -261,43 +321,85 @@ export const Chatbot = () => {
               padding="16"
               gap="16"
               flex={1}
+              className="no-scrollbar"
               style={{ overflowY: "auto", background: "rgba(5, 7, 11, 0.95)" }}
             >
               <Text variant="body-default-s" weight="strong">
                 Chatbot Configuration
               </Text>
 
-              <Column gap="8">
+              <Column gap="8" fillWidth>
                 <Text variant="body-default-xs" onBackground="neutral-weak">
-                  OpenRouter Model Path
+                  Select AI Assistant Model
                 </Text>
-                <Input
-                  id="model-path"
-                  value={customModel}
-                  onChange={(e) => setCustomModel(e.target.value)}
-                  placeholder="e.g., google/gemini-2.5-flash"
-                />
-              </Column>
 
-              <Column gap="8">
-                <Text variant="body-default-xs" onBackground="neutral-weak">
-                  OpenRouter API Key (Optional Override)
-                </Text>
-                <Input
-                  id="api-key"
-                  type="password"
-                  value={customApiKey}
-                  onChange={(e) => setCustomApiKey(e.target.value)}
-                  placeholder="Paste your openrouter key here..."
-                />
-                <Text
-                  variant="body-default-xs"
-                  onBackground="neutral-weak"
-                  style={{ fontSize: "10px" }}
-                >
-                  💡 If left empty, it runs securely via the server proxy route `/api/chat` using
-                  the host credentials.
-                </Text>
+                <Column gap="12" fillWidth>
+                  {/* Nvidia Nemotron Card */}
+                  <Row
+                    padding="12"
+                    radius="m"
+                    vertical="center"
+                    style={{
+                      cursor: "pointer",
+                      background: "var(--neutral-alpha-weak)",
+                      border:
+                        customModel === "nvidia/nemotron-3-super-120b-a12b:free"
+                          ? "2px solid var(--brand-solid)"
+                          : "2px solid var(--neutral-alpha-medium)",
+                      transition: "all 0.2s ease",
+                    }}
+                    onClick={() => setCustomModel("nvidia/nemotron-3-super-120b-a12b:free")}
+                  >
+                    <Column gap="4" flex={1}>
+                      <Text variant="label-strong-m" onBackground="neutral-strong">
+                        NVIDIA Nemotron 3 Super (Free)
+                      </Text>
+                      <Text
+                        variant="body-default-xs"
+                        onBackground="neutral-weak"
+                        style={{ fontSize: "11px" }}
+                      >
+                        120B hybrid MoE model, optimized for reasoning & speed
+                      </Text>
+                    </Column>
+                    {customModel === "nvidia/nemotron-3-super-120b-a12b:free" && (
+                      <Flex style={{ color: "var(--brand-solid)", fontWeight: "bold" }}>✓</Flex>
+                    )}
+                  </Row>
+
+                  {/* Gemini Card */}
+                  <Row
+                    padding="12"
+                    radius="m"
+                    vertical="center"
+                    style={{
+                      cursor: "pointer",
+                      background: "var(--neutral-alpha-weak)",
+                      border:
+                        customModel === "google/gemini-2.5-flash"
+                          ? "2px solid var(--brand-solid)"
+                          : "2px solid var(--neutral-alpha-medium)",
+                      transition: "all 0.2s ease",
+                    }}
+                    onClick={() => setCustomModel("google/gemini-2.5-flash")}
+                  >
+                    <Column gap="4" flex={1}>
+                      <Text variant="label-strong-m" onBackground="neutral-strong">
+                        Gemini 2.5 Flash (Direct API)
+                      </Text>
+                      <Text
+                        variant="body-default-xs"
+                        onBackground="neutral-weak"
+                        style={{ fontSize: "11px" }}
+                      >
+                        Ultra low-latency, fast direct Google fallback
+                      </Text>
+                    </Column>
+                    {customModel === "google/gemini-2.5-flash" && (
+                      <Flex style={{ color: "var(--brand-solid)", fontWeight: "bold" }}>✓</Flex>
+                    )}
+                  </Row>
+                </Column>
               </Column>
 
               <Row gap="8" style={{ width: "100%", marginTop: "auto" }}>
@@ -321,7 +423,8 @@ export const Chatbot = () => {
                 padding="12"
                 gap="12"
                 flex={1}
-                style={{ overflowY: "auto", maxHeight: "330px" }}
+                className="no-scrollbar"
+                style={{ overflowY: "auto", minHeight: 0 }}
               >
                 {messages.map((msg, index) => (
                   <Flex
@@ -347,19 +450,14 @@ export const Chatbot = () => {
                             : "1px solid var(--neutral-alpha-medium)",
                       }}
                     >
-                      <Text
-                        variant="body-default-s"
+                      <div
                         style={{
-                          color:
-                            msg.role === "user"
-                              ? "var(--brand-on-background-strong)"
-                              : "var(--neutral-on-background-strong)",
                           wordBreak: "break-word",
                           whiteSpace: "pre-wrap",
                         }}
                       >
-                        {msg.content}
-                      </Text>
+                        {renderMarkdown(msg.content, msg.role === "user")}
+                      </div>
                     </div>
                   </Flex>
                 ))}
@@ -376,13 +474,13 @@ export const Chatbot = () => {
               </Column>
 
               {/* Suggestions Panel */}
-              {messages.length === 1 && (
-                <Column paddingX="12" paddingBottom="8" gap="4">
+              {!isLoading && suggestions.length > 0 && (
+                <Column paddingX="12" paddingBottom="8" gap="4" style={{ flexShrink: 0 }}>
                   <Text variant="body-default-xs" onBackground="neutral-weak">
                     Quick Suggestions:
                   </Text>
                   <Row gap="4" style={{ flexWrap: "wrap" }}>
-                    {quickSuggestions.map((suggestion) => (
+                    {suggestions.map((suggestion) => (
                       <button
                         type="button"
                         key={suggestion}
@@ -422,6 +520,7 @@ export const Chatbot = () => {
                 style={{
                   borderTop: "1px solid var(--neutral-alpha-medium)",
                   background: "var(--neutral-alpha-weak)",
+                  flexShrink: 0,
                 }}
               >
                 <div style={{ flex: 1 }}>
@@ -447,4 +546,185 @@ export const Chatbot = () => {
       )}
     </div>
   );
+};
+
+const parseInlineMarkdown = (text: string) => {
+  const regex = /(\*\*|__)(.*?)\1|(\*|_)(.*?)\3|(`)(.*?)\5|\[([^\]]+)\]\(([^)]+)\)/g;
+  const parts = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while (true) {
+    match = regex.exec(text);
+    if (!match) break;
+
+    if (match.index > lastIndex) {
+      parts.push(text.substring(lastIndex, match.index));
+    }
+
+    if (match[1]) {
+      parts.push(
+        <strong key={match.index} style={{ fontWeight: "bold" }}>
+          {match[2]}
+        </strong>,
+      );
+    } else if (match[3]) {
+      parts.push(
+        <em key={match.index} style={{ fontStyle: "italic" }}>
+          {match[4]}
+        </em>,
+      );
+    } else if (match[5]) {
+      parts.push(
+        <code
+          key={match.index}
+          style={{
+            fontFamily: "monospace",
+            background: "var(--neutral-alpha-medium)",
+            padding: "2px 4px",
+            borderRadius: "4px",
+            fontSize: "0.9em",
+          }}
+        >
+          {match[6]}
+        </code>,
+      );
+    } else if (match[7]) {
+      parts.push(
+        <a
+          key={match.index}
+          href={match[8]}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            color: "var(--brand-solid)",
+            textDecoration: "underline",
+            fontWeight: "500",
+            cursor: "pointer",
+          }}
+        >
+          {match[7]}
+        </a>,
+      );
+    }
+
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : text;
+};
+
+const renderMarkdown = (text: string, isUser: boolean) => {
+  const lines = text.split("\n");
+  const textColor = isUser
+    ? "var(--brand-on-background-strong)"
+    : "var(--neutral-on-background-strong)";
+
+  const linesWithKeys = lines.map((line, idx) => ({
+    line,
+    id: `md-line-${idx}-${line.length}`,
+  }));
+
+  return linesWithKeys.map(({ line, id }) => {
+    if (line.startsWith("### ")) {
+      return (
+        <Text
+          key={id}
+          variant="heading-strong-xs"
+          style={{ display: "block", marginTop: "8px", marginBottom: "4px", color: textColor }}
+        >
+          {parseInlineMarkdown(line.substring(4))}
+        </Text>
+      );
+    }
+    if (line.startsWith("## ")) {
+      return (
+        <Text
+          key={id}
+          variant="heading-strong-s"
+          style={{ display: "block", marginTop: "12px", marginBottom: "6px", color: textColor }}
+        >
+          {parseInlineMarkdown(line.substring(3))}
+        </Text>
+      );
+    }
+    if (line.startsWith("# ")) {
+      return (
+        <Text
+          key={id}
+          variant="heading-strong-m"
+          style={{ display: "block", marginTop: "16px", marginBottom: "8px", color: textColor }}
+        >
+          {parseInlineMarkdown(line.substring(2))}
+        </Text>
+      );
+    }
+
+    if (line.startsWith("- ") || line.startsWith("* ")) {
+      return (
+        <Row
+          key={id}
+          gap="8"
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            paddingLeft: "8px",
+            marginTop: "2px",
+            marginBottom: "2px",
+          }}
+        >
+          <Text variant="body-default-s" style={{ color: textColor }}>
+            •
+          </Text>
+          <Text variant="body-default-s" style={{ flex: 1, color: textColor }}>
+            {parseInlineMarkdown(line.substring(2))}
+          </Text>
+        </Row>
+      );
+    }
+
+    const numListMatch = line.match(/^(\d+)\.\s(.*)/);
+    if (numListMatch) {
+      const num = numListMatch[1];
+      const content = numListMatch[2];
+      return (
+        <Row
+          key={id}
+          gap="8"
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            paddingLeft: "8px",
+            marginTop: "2px",
+            marginBottom: "2px",
+          }}
+        >
+          <Text variant="body-default-s" style={{ color: textColor }}>
+            {num}.
+          </Text>
+          <Text variant="body-default-s" style={{ flex: 1, color: textColor }}>
+            {parseInlineMarkdown(content)}
+          </Text>
+        </Row>
+      );
+    }
+
+    if (line.trim() === "") {
+      return <div key={id} style={{ height: "8px" }} />;
+    }
+
+    return (
+      <Text
+        key={id}
+        variant="body-default-s"
+        style={{ display: "block", marginBottom: "4px", color: textColor }}
+      >
+        {parseInlineMarkdown(line)}
+      </Text>
+    );
+  });
 };
