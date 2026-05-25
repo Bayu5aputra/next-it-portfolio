@@ -143,7 +143,9 @@ export const Chatbot = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch AI response.");
+        const errorMsg =
+          data.message || (typeof data.error === "object" ? data.error.message : data.error);
+        throw new Error(errorMsg || "Failed to fetch AI response.");
       }
 
       const aiMessage = data.choices?.[0]?.message?.content || "No response received.";
