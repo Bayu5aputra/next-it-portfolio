@@ -43,7 +43,8 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  const image = post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`;
+  const image =
+    post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`;
   const canonical = `${blog.path}/${post.slug}`;
   return {
     title: post.metadata.title,

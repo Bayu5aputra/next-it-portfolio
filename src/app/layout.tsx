@@ -3,8 +3,8 @@ import "@once-ui-system/core/css/tokens.css";
 import "@/resources/custom.css";
 
 import { baseURL, dataStyle, effects, fonts, home, style } from "@/resources";
-import ClientLayout from "./ClientLayout";
 import type { Metadata, Viewport } from "next";
+import ClientLayout from "./ClientLayout";
 
 export const viewport: Viewport = {
   width: "device-width",

@@ -5,13 +5,17 @@ import {
   HiArrowTopRightOnSquare,
   HiArrowUpRight,
   HiCalendarDays,
+  HiChatBubbleLeftRight,
   HiEnvelope,
+  HiOutlineCog6Tooth,
   HiOutlineDocument,
   HiOutlineEye,
   HiOutlineEyeSlash,
   HiOutlineGlobeAsiaAustralia,
   HiOutlineLink,
   HiOutlineRocketLaunch,
+  HiPaperAirplane,
+  HiSparkles,
 } from "react-icons/hi2";
 
 import {
@@ -74,6 +78,10 @@ export const iconLibrary: Record<string, IconType> = {
   telegram: FaTelegram,
   instagram: FaInstagram,
   award: FaAward,
+  chat: HiChatBubbleLeftRight,
+  send: HiPaperAirplane,
+  sparkles: HiSparkles,
+  cog: HiOutlineCog6Tooth,
 };
 
 export type IconLibrary = typeof iconLibrary;

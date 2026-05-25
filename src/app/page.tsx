@@ -15,8 +15,8 @@ import {
   Schema,
   Text,
 } from "@once-ui-system/core";
-import Image from "next/image";
 import type { Metadata } from "next";
+import Image from "next/image";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

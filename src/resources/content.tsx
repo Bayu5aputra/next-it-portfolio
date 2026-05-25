@@ -45,7 +45,8 @@ const home: Home = {
   image: "/images/og/home.png",
   label: "Home",
   title: `${person.name} | IT Infrastructure Engineer Portfolio`,
-  description: "IT Infrastructure Engineer portfolio focused on network reliability, observability, and IoT operations in Indonesia.",
+  description:
+    "IT Infrastructure Engineer portfolio focused on network reliability, observability, and IoT operations in Indonesia.",
   headline: (
     <>
       Resilient Networks & <br /> Practical IoT Systems
@@ -352,7 +353,8 @@ const blog: Blog = {
   path: "/blog",
   label: "Blog",
   title: "Engineering Logs | Network, IoT, and Infrastructure",
-  description: "Technical notes on network operations, infrastructure reliability, troubleshooting, and IoT systems.",
+  description:
+    "Technical notes on network operations, infrastructure reliability, troubleshooting, and IoT systems.",
 };
 
 const work: Work = {
@@ -477,6 +479,3 @@ const badges: Badges = {
   ],
 };
 export { person, social, newsletter, home, about, blog, work, badges };
-
-
-

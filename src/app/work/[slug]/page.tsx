@@ -42,7 +42,8 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  const image = post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`;
+  const image =
+    post.metadata.image || `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`;
   const canonical = `${work.path}/${post.slug}`;
   return {
     title: post.metadata.title,
@@ -129,6 +130,7 @@ export default async function Project({
       />
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: injecting JSON-LD for SEO is safe
         dangerouslySetInnerHTML={{ __html: JSON.stringify(projectStructuredData) }}
       />
       <Column maxWidth="s" gap="16" horizontal="center" align="center">

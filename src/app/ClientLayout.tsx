@@ -1,9 +1,6 @@
 "use client";
 
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
-import { Providers } from "@/components/Providers";
-import { RouteGuard } from "@/components/RouteGuard";
+import { Chatbot, Footer, Header, Providers, RouteGuard } from "@/components";
 import { Splash } from "@/components/Splash";
 import type { DataStyleConfig, EffectsConfig, FontsConfig, StyleConfig } from "@/types";
 import {
@@ -14,13 +11,13 @@ import {
   type SpacingToken,
   type opacity,
 } from "@once-ui-system/core";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function ClientLayout({
   children,
@@ -201,6 +198,7 @@ export default function ClientLayout({
               </Flex>
             </Flex>
             <Footer />
+            <Chatbot />
           </Flex>
           <Analytics />
           <SpeedInsights />
