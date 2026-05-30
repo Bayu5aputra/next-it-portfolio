@@ -1,0 +1,91 @@
+---
+title: "SD-WAN, SASE, and the 'coffee shop' branch: how Indonesian enterprise networks are changing"
+publishedAt: "2026-04-22"
+summary: "MPLS is giving way to SD-WAN. SD-WAN is folding into SASE. And a new branch model treats every office like a coffee shop with an internet connection. Here is what that means for multi-site operations."
+image: "/Blog.webp"
+tag: "Networking"
+---
+
+## The MPLS contract nobody wants to renew
+
+I have talked to enough network engineers in Indonesia to know the pattern. The company has a 5-year MPLS contract connecting branch offices to headquarters. The contract is up for renewal, and the price per megabit has not dropped as fast as internet bandwidth costs. Meanwhile, the branches need more bandwidth for cloud applications, video conferencing, and IoT data uploads.
+
+The question on every renewal cycle: do we keep paying for MPLS, or do we move to SD-WAN?
+
+The answer in 2026 is more nuanced than a simple switchover. The real shift is not just from MPLS to SD-WAN. It is from a network-centric architecture to one where security and networking are delivered together from the cloud. That convergence is called SASE, Secure Access Service Edge, and it is reshaping how Indonesian enterprises think about their WAN.
+
+## What SD-WAN actually solves
+
+SD-WAN (Software-Defined Wide Area Network) decouples the control plane from the transport layer. In practical terms, this means:
+
+- You can use multiple internet connections (fiber, LTE, broadband) instead of relying solely on a single MPLS link.
+- Traffic routing decisions are made by software based on application requirements. Video calls get prioritized over bulk file transfers. Cloud application traffic goes directly to the internet rather than being backhauled through headquarters.
+- Adding or removing a branch site does not require coordinating with a carrier to provision a new MPLS circuit. You ship an appliance, plug it into any internet connection, and the overlay network forms automatically.
+
+For multi-site operations, the appeal is clear. We manage locations spread across different areas, and the ability to use whatever internet connectivity is available at each site, rather than waiting weeks for a carrier to provision a dedicated circuit, is a practical advantage.
+
+## From SD-WAN to SASE: why the merge happened
+
+SD-WAN handles the networking side. But once you route traffic directly to the internet from branch offices (instead of backhauling it through a central firewall), you lose the security inspection that the central firewall provided. Each branch becomes its own internet breakout point, and each one needs protection.
+
+SASE solves this by integrating security functions, firewall, web filtering, CASB (Cloud Access Security Broker), ZTNA (Zero Trust Network Access), directly into the SD-WAN fabric. Instead of deploying separate security appliances at each branch, you push traffic through cloud-based security inspection points. The branch appliance handles routing. The cloud handles security.
+
+In Indonesia, this model is gaining traction for a specific reason: managed services. Many enterprises lack the internal team to deploy and maintain security appliances at every location. SASE providers offer this as a managed service, which shifts the operational burden from the customer to the provider.
+
+## The "coffee shop" branch model
+
+This is a term I first encountered from HPE's networking team, and it describes a real architectural trend. The idea is simple: treat every branch office like a coffee shop.
+
+At a coffee shop, there is an internet connection and a wireless access point. There are no servers, no local firewalls, no complex routing configurations. Users connect, authenticate, and all their traffic is secured through cloud-based controls.
+
+For enterprise branches, this means:
+
+- **Minimal on-site hardware.** A single SD-WAN appliance and wireless access points. No local servers, no local Active Directory domain controllers, no local firewall stacks.
+- **Cloud-delivered everything.** Applications run in the cloud. Security inspection happens in the cloud. Authentication goes through a cloud identity provider.
+- **Simple operations.** If the internet connection works, the branch works. If it fails, users switch to LTE backup. There is no local infrastructure that needs on-site IT support.
+
+This model resonates in Indonesia, where many companies have branch offices in locations where sending an IT technician takes hours or days. The less complex the local setup, the fewer things that can break and require a site visit.
+
+## Zero Trust extends to IoT
+
+ZTNA started as a way to secure remote user access. In 2026, it is expanding to cover IoT and unmanaged devices. This is particularly relevant for organizations that deploy field sensors, cameras, and controllers across their sites.
+
+Traditional VPN-based access assumes the device can run a VPN client. A flood sensor or an IP camera cannot. Zero Trust for IoT works differently:
+
+- **Device identity.** Each IoT device is registered with a certificate or hardware-based identity. The network does not grant access based on IP address alone.
+- **Micro-segmentation.** Even within the IoT VLAN, devices are grouped by function. Cameras can reach the NVR. Sensors can reach the data collector. Nothing else.
+- **Behavioral monitoring.** If a device starts generating traffic outside its expected pattern, the access policy changes automatically. The device gets quarantined until someone investigates.
+
+For our deployment, we are not fully at this level yet, but we are moving toward it. The first step was network segmentation, which we already implemented. The next step is device identity management, which requires coordination between the networking and security teams.
+
+## 5G as a WAN transport
+
+Indonesia's 5G rollout is accelerating, and it opens a new option for WAN connectivity. For locations where fiber is not available or takes too long to provision, 5G provides a viable alternative with the bandwidth and latency characteristics that SD-WAN needs.
+
+Specific use cases where 5G fits:
+
+- **Temporary sites.** Construction offices, event locations, or pop-up retail spaces that need connectivity for weeks or months rather than years.
+- **Backup connectivity.** As a failover path when the primary fiber link goes down. SD-WAN handles the failover automatically.
+- **Remote IoT.** Sensors at locations without wired infrastructure, like environmental monitoring stations at the edges of a development area.
+
+The cost per gigabyte is still higher than fiber, so 5G is not a wholesale replacement for wired WAN. But as a complement within an SD-WAN architecture, it fills gaps that were previously difficult to address.
+
+## What this means for Indonesian enterprises
+
+The shift from MPLS to SD-WAN to SASE is not a technology decision in isolation. It is tied to how Indonesian businesses are evolving:
+
+**Cloud adoption is accelerating.** More applications run in public cloud or SaaS. Backhauling that traffic through headquarters adds latency and cost. Direct internet breakout at the branch, secured by SASE, makes more sense.
+
+**The workforce is distributed.** Hybrid work means employees connect from offices, homes, and coffee shops (actual ones). ZTNA provides consistent access regardless of location.
+
+**IT talent is concentrated in major cities.** The "coffee shop" branch model reduces the need for on-site IT staff at remote locations, which is practical when your branches are spread across different islands and provinces.
+
+**Cost pressure is real.** MPLS circuits to secondary cities and smaller towns are expensive relative to broadband internet. SD-WAN over commodity internet, combined with SASE security, often delivers better performance at lower cost.
+
+## The transition is not instant
+
+I should be honest about the timeline. Moving from an MPLS-based network to a full SASE architecture is a multi-year project for most organizations. It involves renegotiating carrier contracts, deploying new hardware at every branch, migrating security policies from on-premises firewalls to cloud-based controls, and retraining the operations team.
+
+The pragmatic approach is to start with new sites. Deploy SD-WAN at new branches and let existing MPLS sites run until their contracts expire. This gives the team time to learn the new architecture without disrupting established operations.
+
+For organizations earlier in their network journey, the good news is that you can skip the MPLS era entirely. Start with SD-WAN and SASE from the beginning, and you avoid the migration pain altogether.

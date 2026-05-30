@@ -2,7 +2,8 @@
 
 import { person } from "@/resources";
 import { Button, Column, Flex, IconButton, Input, Row, Spinner, Text } from "@once-ui-system/core";
-import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -57,15 +58,98 @@ Technical & Domain Knowledge:
 
 Tone Instructions:
 - Answer directly based on these facts. If asked about things completely unrelated to Bayu or his IT/networking domain, suggest emailing Bayu at bayusaputra.005.003@gmail.com.
-- Do not make up fake experiences or certificates. Keep responses concise (1-3 paragraphs or bullet points).`;
+- Do not make up fake experiences or certificates. Keep responses concise (1-3 paragraphs or bullet points).
+- IMPORTANT: At the very end of EVERY response, you MUST provide exactly 3 short, natural follow-up questions that the user might want to ask next based on the conversation context. You MUST format these questions exactly as a JSON array on a new line prefixed with "SUGGESTIONS:". For example:
+SUGGESTIONS: ["What is MTCNA?", "Tell me about Sinar Mas", "Show me IoT projects"]`;
 
-export const Chatbot = () => {
+// --- Adaptive suggestions constants ---
+// Keyword-to-suggestion mapping for blog/work slug keywords
+const TOPIC_SUGGESTIONS: Record<string, string[]> = {
+  // Networking topics
+  mikrotik:   ["What is Bayu's MTCNA cert?", "How does Bayu harden routers?", "MikroTik vs Cisco experience?"],
+  cve:        ["How does Bayu handle CVEs?", "RouterOS hardening tips?", "Any network security projects?"],
+  hardening:  ["What firewall rules does Bayu use?", "How to secure management access?", "Tell me about network security"],
+  networking: ["What networking certs does Bayu have?", "Explain CCNA vs MTCNA", "Multi-site network experience?"],
+  "5g":       ["How does 5G affect IoT?", "Bayu's networking background?", "SD-WAN and 5G together?"],
+  sdwan:      ["What is SASE?", "Bayu's multi-site network work?", "MPLS vs SD-WAN experience?"],
+  sase:       ["How does Zero Trust work?", "SD-WAN at Sinar Mas Land?", "Network architecture projects?"],
+
+  // Security topics
+  security:   ["Bayu's security certifications?", "Zero Trust implementation?", "How are incidents handled?"],
+  "zero-trust": ["How does Bayu implement ZT?", "Identity-based security?", "P1-P4 incident handling?"],
+  agentic:    ["How does Bayu handle incidents?", "What is SLA P1-P4?", "Security monitoring tools?"],
+  soc:        ["Incident response at Sinar Mas?", "What monitoring tools are used?", "CTEM explained?"],
+  cybersecurity: ["What security certs does Bayu have?", "How are P1 incidents handled?", "Network security projects?"],
+  cloud:      ["Cloud security experience?", "Docker and container security?", "Monitoring cloud infra?"],
+
+  // IoT topics
+  iot:        ["What IoT devices does Bayu manage?", "Flood sensor monitoring?", "IoT security practices?"],
+  botnet:     ["How to protect IoT devices?", "Bayu's field device security?", "Network segmentation for IoT?"],
+  sensor:     ["What sensors does Bayu manage?", "Flood and soil monitoring?", "IoT data pipeline?"],
+  smart:      ["Smart city projects?", "ATCS monitoring system?", "IoT at Sinar Mas Land?"],
+  atcs:       ["How does ATCS monitoring work?", "Grafana + Docker dashboard?", "Traffic system experience?"],
+
+  // Monitoring / Observability
+  grafana:    ["How does Bayu use Grafana?", "ATCS monitoring dashboard?", "Docker + Prometheus setup?"],
+  docker:     ["Docker monitoring stack?", "Grafana deployment with Docker?", "Container experience?"],
+  observability: ["What monitoring tools are used?", "SLO-based alerting?", "Prometheus + Loki setup?"],
+  monitoring: ["Grafana dashboards at work?", "How are devices monitored?", "ICCC and ITMS tools?"],
+  prometheus: ["Prometheus + Grafana setup?", "Metrics collection approach?", "Monitoring IoT devices?"],
+
+  // Smart City
+  city:       ["Smart city projects?", "ATCS system details?", "IoT in urban infrastructure?"],
+  traffic:    ["ATCS traffic system?", "How is traffic monitored?", "Smart APIL experience?"],
+  apil:       ["What is Smart APIL?", "ATCS at Sinar Mas Land?", "Traffic monitoring tools?"],
+  sustainability: ["Green tech in smart cities?", "IoT for sustainability?", "Environmental sensors?"],
+
+  // Work/projects
+  looker:     ["BAZNAS dashboard details?", "Looker Studio experience?", "Data visualization projects?"],
+  baznas:     ["What did Bayu do at BAZNAS?", "Looker Studio dashboard?", "Web development internship?"],
+  "sinar-mas": ["Current role details?", "IoT work at Sinar Mas?", "Multi-site network ops?"],
+};
+
+const DEFAULT_SUGGESTIONS = [
+  "What certificates does Bayu have?",
+  "Tell me about Sinar Mas Land role",
+  "How do I contact Bayu?",
+];
+
+const PAGE_SUGGESTIONS: Record<string, string[]> = {
+  "/about":  ["What is Bayu's education?", "Work experience summary?", "Technical skills overview?"],
+  "/badges": ["What is MTCNA?", "Cisco CCNA details?", "BNSP certification?"],
+  "/work":   ["Featured projects?", "ATCS monitoring project?", "Looker Studio dashboard?"],
+  "/blog":   ["Latest blog post topics?", "IoT articles?", "Networking articles?"],
+};
+
+// Extract matching suggestions from slug keywords
+const getSuggestionsForSlug = (slug: string): string[] => {
+  const words = slug.toLowerCase().split("-");
+  for (const word of words) {
+    if (Object.prototype.hasOwnProperty.call(TOPIC_SUGGESTIONS, word)) {
+      return TOPIC_SUGGESTIONS[word];
+    }
+  }
+  // Try partial matches for compound slugs
+  const fullSlug = slug.toLowerCase();
+  for (const [key, suggs] of Object.entries(TOPIC_SUGGESTIONS)) {
+    if (fullSlug.includes(key)) {
+      return suggs;
+    }
+  }
+  return DEFAULT_SUGGESTIONS;
+};
+
+interface ChatbotProps {
+  isVisible?: boolean;
+}
+
+export const Chatbot: React.FC<ChatbotProps> = ({ isVisible = true }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: `Hi there! I am Bayu's virtual co-pilot. Ask me anything about his work at Sinar Mas Land, network certifications (CCNA, MTCNA), projects, or how to reach him!`,
+      content: `Hi there! I am Next Co-Pilot. Ask me anything about Bayu's work at Sinar Mas Land, network certifications (CCNA, MTCNA), projects, or how to reach him!`,
     },
   ]);
   const [input, setInput] = useState("");
@@ -79,16 +163,48 @@ export const Chatbot = () => {
     "How do I contact Bayu?",
   ]);
 
+  // Page context for adaptive suggestions
+  const pathname = usePathname();
+  const prevPathnameRef = useRef<string | null>(null);
+
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Load custom credentials on mount
+  // Load custom credentials, chat history, and open status on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
       const savedModel =
         localStorage.getItem("openrouter_model") || "nvidia/nemotron-3-super-120b-a12b:free";
       setCustomModel(savedModel);
+
+      const savedMessages = localStorage.getItem("chatbot_messages");
+      if (savedMessages) {
+        try {
+          setMessages(JSON.parse(savedMessages));
+        } catch (e) {
+          console.error("Failed to parse saved messages", e);
+        }
+      }
+
+      const savedIsOpen = localStorage.getItem("chatbot_is_open");
+      if (savedIsOpen) {
+        setIsOpen(savedIsOpen === "true");
+      }
     }
   }, []);
+
+  // Sync messages to localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("chatbot_messages", JSON.stringify(messages));
+    }
+  }, [messages]);
+
+  // Sync isOpen to localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("chatbot_is_open", String(isOpen));
+    }
+  }, [isOpen]);
 
   // Auto scroll to bottom
   // biome-ignore lint/correctness/useExhaustiveDependencies: scroll needs to trigger on message or loading state updates
@@ -101,81 +217,65 @@ export const Chatbot = () => {
     setShowSettings(false);
   };
 
-  const updateSuggestions = (userText: string, aiText: string) => {
-    const text = `${userText} ${aiText}`.toLowerCase();
+  // --- Adaptive suggestions: fully client-side, zero AI tokens ---
 
-    let newSuggestions = [
-      "What certificates does Bayu have?",
-      "Tell me about Sinar Mas Land role",
-      "How do I contact Bayu?",
-    ];
+  // Get suggestions based on current page
+  const getSuggestionsForPage = useCallback((): string[] => {
+    if (!pathname) return DEFAULT_SUGGESTIONS;
 
-    if (
-      text.includes("sertifikasi") ||
-      text.includes("certification") ||
-      text.includes("sertifikat") ||
-      text.includes("certificate") ||
-      text.includes("ccna") ||
-      text.includes("mtcna") ||
-      text.includes("mikrotik") ||
-      text.includes("cisco") ||
-      text.includes("bnsp")
-    ) {
-      newSuggestions = [
-        "What is MTCNA certification?",
-        "Tell me more about Cisco CCNA",
-        "Are there other network credentials?",
-      ];
-    } else if (
-      text.includes("role") ||
-      text.includes("kerja") ||
-      text.includes("pekerjaan") ||
-      text.includes("job") ||
-      text.includes("sinar mas") ||
-      text.includes("sinarmas") ||
-      text.includes("baznas") ||
-      text.includes("damai putra") ||
-      text.includes("kominfo") ||
-      text.includes("internship") ||
-      text.includes("experience")
-    ) {
-      newSuggestions = [
-        "What projects did Bayu do at Sinar Mas Land?",
-        "What tools does he use for IoT?",
-        "Tell me about his BAZNAS internship",
-      ];
-    } else if (
-      text.includes("project") ||
-      text.includes("proyek") ||
-      text.includes("portofolio") ||
-      text.includes("portfolio") ||
-      text.includes("website") ||
-      text.includes("app") ||
-      text.includes("aplikasi")
-    ) {
-      newSuggestions = [
-        "Tell me about his cooking recipe app",
-        "What is the dealership web profile?",
-        "How is the ATCS device monitored?",
-      ];
-    } else if (
-      text.includes("contact") ||
-      text.includes("hubungi") ||
-      text.includes("email") ||
-      text.includes("sosmed") ||
-      text.includes("social") ||
-      text.includes("linkedin") ||
-      text.includes("github") ||
-      text.includes("reach")
-    ) {
-      newSuggestions = [
-        "What is Bayu's email address?",
-        "Show me his LinkedIn profile",
-        "How to hire Bayu?",
-      ];
+    // Blog article
+    if (pathname.startsWith("/blog/") && pathname !== "/blog") {
+      const slug = pathname.replace("/blog/", "");
+      return getSuggestionsForSlug(slug);
     }
 
-    setSuggestions(newSuggestions);
+    // Work project
+    if (pathname.startsWith("/work/") && pathname !== "/work") {
+      const slug = pathname.replace("/work/", "");
+      return getSuggestionsForSlug(slug);
+    }
+
+    // Static pages
+    if (PAGE_SUGGESTIONS[pathname]) {
+      return PAGE_SUGGESTIONS[pathname];
+    }
+
+    return DEFAULT_SUGGESTIONS;
+  }, [pathname]);
+
+  // Update suggestions when page changes
+  useEffect(() => {
+    if (pathname && pathname !== prevPathnameRef.current) {
+      prevPathnameRef.current = pathname;
+      setSuggestions(getSuggestionsForPage());
+    }
+  }, [pathname, getSuggestionsForPage]);
+
+  // Update suggestions after each conversation based on keywords
+  const updateSuggestions = (userText: string, aiText: string) => {
+    const combined = `${userText} ${aiText}`.toLowerCase();
+
+    // Check conversation keywords against topic map
+    for (const [keyword, suggs] of Object.entries(TOPIC_SUGGESTIONS)) {
+      if (combined.includes(keyword)) {
+        setSuggestions(suggs);
+        return;
+      }
+    }
+
+    // Broader keyword categories as fallback
+    if (/sertifikasi|certification|sertifikat|certificate|ccna|mtcna|bnsp/.test(combined)) {
+      setSuggestions(["What is MTCNA certification?", "Cisco CCNA details?", "Other network credentials?"]);
+    } else if (/role|kerja|pekerjaan|job|experience|internship/.test(combined)) {
+      setSuggestions(["Projects at Sinar Mas Land?", "What tools for IoT?", "BAZNAS internship?"]);
+    } else if (/project|proyek|portofolio|portfolio/.test(combined)) {
+      setSuggestions(["ATCS monitoring project?", "Looker Studio dashboard?", "GitHub repositories?"]);
+    } else if (/contact|hubungi|email|linkedin|github|hire/.test(combined)) {
+      setSuggestions(["Bayu's email address?", "LinkedIn profile?", "How to hire Bayu?"]);
+    } else {
+      // Fall back to page-based suggestions
+      setSuggestions(getSuggestionsForPage());
+    }
   };
 
   const handleSend = async (textToSend?: string) => {
@@ -213,9 +313,30 @@ export const Chatbot = () => {
         throw new Error(errorMsg || "Failed to fetch AI response.");
       }
 
-      const aiMessage = data.choices?.[0]?.message?.content || "No response received.";
+      let aiMessage = data.choices?.[0]?.message?.content || "No response received.";
+      
+      // Parse out adaptive suggestions if provided by AI
+      const suggestionsMatch = aiMessage.match(/SUGGESTIONS:\s*(\[[\s\S]*\])/i);
+      if (suggestionsMatch?.[1]) {
+        try {
+          const parsedSuggestions = JSON.parse(suggestionsMatch[1]);
+          if (Array.isArray(parsedSuggestions) && parsedSuggestions.length > 0) {
+            setSuggestions(parsedSuggestions.slice(0, 3).map(s => String(s).trim()));
+            // Remove the suggestions block from the message displayed to user
+            aiMessage = aiMessage.replace(suggestionsMatch[0], "").trim();
+          } else {
+            updateSuggestions(activeText, aiMessage);
+          }
+        } catch (e) {
+          console.error("Failed to parse AI suggestions", e);
+          updateSuggestions(activeText, aiMessage);
+        }
+      } else {
+        // Fallback to local keywords if AI didn't provide suggestions
+        updateSuggestions(activeText, aiMessage);
+      }
+
       setMessages((prev) => [...prev, { role: "assistant", content: aiMessage }]);
-      updateSuggestions(activeText, aiMessage);
     } catch (error) {
       const err = error as Error;
       console.error(err);
@@ -238,7 +359,14 @@ export const Chatbot = () => {
   };
 
   return (
-    <div style={{ position: "fixed", bottom: "24px", right: "24px", zIndex: 9999 }}>
+    <div
+      className="chatbot-container"
+      style={{
+        opacity: isVisible ? 1 : 0,
+        pointerEvents: isVisible ? "auto" : "none",
+        transition: "opacity 0.3s ease",
+      }}
+    >
       {/* Floating Launcher Button */}
       {!isOpen && (
         <IconButton
@@ -265,9 +393,8 @@ export const Chatbot = () => {
           background="surface"
           border="neutral-alpha-weak"
           radius="l"
+          className="chatbot-window"
           style={{
-            width: "360px",
-            height: "520px",
             boxShadow: "0 12px 48px rgba(0, 0, 0, 0.5)",
             backdropFilter: "blur(16px)",
             overflow: "hidden",
@@ -297,7 +424,7 @@ export const Chatbot = () => {
               />
               <Column>
                 <Text variant="body-default-s" weight="strong">
-                  Bayu's Co-pilot
+                  Next Co-Pilot
                 </Text>
                 <Text variant="body-default-xs" onBackground="neutral-weak">
                   AI Portfolio Assistant
@@ -352,7 +479,7 @@ export const Chatbot = () => {
                   >
                     <Column gap="4" flex={1}>
                       <Text variant="label-strong-m" onBackground="neutral-strong">
-                        NVIDIA Nemotron 3 Super (Free)
+                        NVIDIA Nemotron 3 Super
                       </Text>
                       <Text
                         variant="body-default-xs"
@@ -385,7 +512,7 @@ export const Chatbot = () => {
                   >
                     <Column gap="4" flex={1}>
                       <Text variant="label-strong-m" onBackground="neutral-strong">
-                        Gemini 2.5 Flash (Direct API)
+                        Gemini 2.5 Flash
                       </Text>
                       <Text
                         variant="body-default-xs"
@@ -477,7 +604,7 @@ export const Chatbot = () => {
               {!isLoading && suggestions.length > 0 && (
                 <Column paddingX="12" paddingBottom="8" gap="4" style={{ flexShrink: 0 }}>
                   <Text variant="body-default-xs" onBackground="neutral-weak">
-                    Quick Suggestions:
+                    AI Suggestion:
                   </Text>
                   <Row gap="4" style={{ flexWrap: "wrap" }}>
                     {suggestions.map((suggestion) => (

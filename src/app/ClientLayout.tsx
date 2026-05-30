@@ -198,8 +198,8 @@ export default function ClientLayout({
               </Flex>
             </Flex>
             <Footer />
-            <Chatbot />
           </Flex>
+          <Chatbot isVisible={isContentVisible} />
           <Analytics />
           <SpeedInsights />
         </Column>

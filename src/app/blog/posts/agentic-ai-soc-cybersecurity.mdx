@@ -1,0 +1,74 @@
+---
+title: "Agentic AI changed the SOC: what infrastructure engineers need to know"
+publishedAt: "2026-05-20"
+summary: "AI agents now probe networks and triage alerts autonomously. Here is what that means for incident handling, threat exposure management, and the people who keep the lights on."
+image: "/Blog.webp"
+tag: "Security"
+---
+
+## When the attacker does not need a human either
+
+Sometime around early 2026, the cybersecurity conversation shifted. It was no longer about generative AI writing phishing emails or summarizing threat reports. The new term was "Agentic AI," and it described something more unsettling: autonomous systems that can reason through multi-step attack chains, identify vulnerabilities, and execute lateral movement without a human directing each step.
+
+For someone who handles incident response at the infrastructure level, with SLA tiers from Critical P1 down to Low P4, this reframing was hard to ignore. The attacks were getting faster. The time between initial probe and lateral movement was shrinking from hours to minutes.
+
+## What Agentic AI actually means in practice
+
+The word "agentic" gets thrown around loosely, so let me be specific about what changed.
+
+Traditional automated attacks follow pre-scripted patterns. A scanner runs a known exploit against a target, and if it works, the attacker (a person) decides what to do next. Agentic AI removes that human decision loop. The AI agent can:
+
+- Probe a network segment and identify which services are running.
+- Select an appropriate exploit from its toolkit based on what it finds.
+- Execute the exploit, establish persistence, and begin moving laterally.
+- Adapt when defenses block a path, trying alternative routes or techniques.
+
+All of this happens at machine speed. By the time a human analyst reviews the first alert, the agent may have already pivoted through multiple network segments.
+
+## The defensive response: Agentic SOC
+
+The industry's answer has been to fight fire with fire. The "Agentic SOC" concept deploys AI agents on the defensive side, handling data correlation, alert triage, and initial investigation in milliseconds. The human analysts still make the strategic decisions, but they are no longer buried under thousands of alerts that need manual review.
+
+Here is where this becomes relevant for infrastructure teams rather than just security analysts:
+
+**Faster escalation means faster pressure on infra.** When an AI agent triages a P1 incident at 2 AM and immediately generates a containment recommendation, the infrastructure team needs to act on it. There is less buffer time between detection and response. The old pattern of "security sends an email, we review it in the morning" does not work when the attacker's agent is making decisions every few seconds.
+
+**Alert context improves.** The upside of AI-driven triage is that when an incident does reach your desk, it tends to come with better context. Instead of "suspicious traffic detected on VLAN 42," you might get "AI agent detected credential stuffing against the WebFig interface on router X, correlated with a new SSH session from an unusual source IP, recommend isolating the management interface." That is actionable.
+
+## Continuous Threat Exposure Management
+
+Another shift I have been tracking is the move from periodic vulnerability scanning to Continuous Threat Exposure Management, or CTEM. The old model looked like this: run a scan every quarter, generate a report with hundreds of findings, prioritize a few, patch them, repeat.
+
+CTEM operates differently. Instead of trying to catalog every vulnerability, it focuses on the exposures that matter most given your specific environment. A misconfigured firewall rule on a router that faces the internet is more urgent than a missing patch on an internal-only server that sits behind three layers of segmentation.
+
+For multi-site infrastructure, where you might have dozens of routers, switches, and IoT gateways spread across different locations, CTEM helps you focus on what an attacker would actually target first. In my experience, the answer is usually one of three things:
+
+1. Management interfaces exposed to broader network segments than necessary.
+2. Default or weak credentials on edge devices.
+3. Unpatched services that are enabled by default but never actually used.
+
+## Identity became the perimeter
+
+Zero Trust has been a talking point for years, but in 2026 it became an operational requirement rather than a conference slide. Cyber insurance providers now ask for evidence of Zero Trust implementation. Government partnerships require it. And the reason is straightforward: attackers are prioritizing credential abuse over technical exploits.
+
+Why spend effort finding a buffer overflow when you can buy stolen credentials or trick someone into handing them over? The data from IBM's latest threat reports confirms this pattern. Identity-based attacks, using legitimate credentials to bypass security controls, outpaced traditional exploit-based attacks through 2025 and into 2026.
+
+For infrastructure teams, this translates into practical requirements:
+
+- **Multi-factor authentication on every management interface.** Not just the VPN. Every router, switch, and hypervisor that accepts admin logins.
+- **Just-In-Time access.** Instead of permanent admin accounts, provision elevated access only when needed and revoke it automatically after a set period.
+- **Session monitoring.** Log and review all administrative sessions, especially on network devices where a single configuration change can affect the entire environment.
+
+## Quantum threats: not science fiction anymore
+
+One more trend worth mentioning: the "Harvest Now, Decrypt Later" problem. Nation-state actors and sophisticated groups are capturing encrypted data today, banking on the assumption that quantum computers will eventually break current encryption algorithms.
+
+For most infrastructure teams, the immediate action is not to panic but to start building cryptographic agility. That means knowing what encryption algorithms your VPN tunnels, certificate authorities, and management protocols use, and having a plan to swap them when post-quantum standards mature.
+
+Run an audit of your cryptographic assets. Which routers use which TLS versions? Which VPNs still negotiate with older ciphers? This inventory becomes the foundation for a migration plan when the time comes.
+
+## Where this leaves the infrastructure engineer
+
+The role is changing. Five years ago, an infrastructure engineer could focus primarily on uptime, bandwidth, and hardware lifecycle. Now, security is inseparable from infrastructure. The same person configuring a fiber backbone also needs to think about credential management, exposure surface, and incident response timelines.
+
+That is not a burden. It is an expansion of scope that makes the work more interesting and more valuable. But it does require staying current with how threats evolve, and in 2026, they evolve at machine speed.

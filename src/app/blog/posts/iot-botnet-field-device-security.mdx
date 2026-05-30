@@ -1,0 +1,86 @@
+---
+title: "3 million infected devices: what the 2026 IoT botnet takedowns teach field engineers"
+publishedAt: "2026-05-15"
+summary: "Aisuru hit 15.72 Tbps. RondoDox targeted enterprise control planes. And a serial converter with hard-coded passwords scored a CVSS 9.8. Here is what I learned securing field IoT."
+image: "/Blog.webp"
+tag: "IoT"
+---
+
+## The devices nobody thinks about
+
+In early 2026, the US Department of Justice, working with German and Canadian authorities, took down four major IoT botnets: Aisuru, KimWolf, JackSkid, and Mossad. Collectively, these botnets had compromised over 3 million devices. Routers, IP cameras, smart TVs, and network-attached storage boxes had all been quietly recruited into attack infrastructure.
+
+Aisuru alone was linked to a DDoS attack that peaked at 15.72 Tbps. To put that in perspective, most enterprise uplinks would be overwhelmed by a fraction of that traffic.
+
+I manage field IoT devices at a property development company: flood sensors, soil movement sensors, rain meters, CCTV cameras, and NVR units spread across multiple sites. When I read about these takedowns, my first thought was not "that is interesting." It was "how many of my devices would survive that kind of scrutiny?"
+
+## The attacks that matter
+
+### Aisuru and friends: consumer devices at scale
+
+The four botnets that were dismantled shared a common playbook. They targeted devices with default credentials, unpatched firmware, or exposed management interfaces. The infected devices were then used to generate massive DDoS traffic or serve as proxy nodes for other attacks.
+
+Routers accounted for roughly 75% of the compromised devices. That number is worth sitting with. Three out of four infected devices were routers, the same hardware that forms the backbone of most network infrastructure.
+
+### RondoDox: going after enterprise gear
+
+RondoDox took a different approach. Instead of targeting consumer devices, it exploited CVE-2025-37164, a remote code execution vulnerability in HPE OneView. This is enterprise infrastructure management software used by financial institutions, government agencies, and industrial organizations.
+
+The shift from consumer to enterprise targets is significant. It means botnet operators are not just looking for volume anymore. They want access to environments where the payoff is higher: data theft, ransomware deployment, or persistent access to corporate networks.
+
+### CVE-2026-7786: the serial converter nobody patched
+
+This one hit close to home. The USR-W610 is a serial-to-ethernet converter used in industrial and IoT environments to connect legacy serial devices to modern IP networks. In May 2026, researchers disclosed that it ships with hard-coded plaintext administrator credentials. CVSS score: 9.8 out of 10.
+
+These converters sit in an awkward spot between OT and IT. The networking team might not know they exist. The facilities team that installed them might not have the skills to manage their firmware. And the manufacturer may never release a patch.
+
+I have seen similar devices in field deployments, devices that bridge a sensor's RS-485 output to the IP network so Grafana can pull the data. They work, so nobody touches them. And nobody touching them means nobody is checking whether they are running factory-default credentials.
+
+## What actually works for field IoT security
+
+After the botnet news and a thorough audit of our own field devices, I settled on a set of practices that are realistic for environments where you cannot always control every device.
+
+### 1. Build a real inventory
+
+You cannot protect what you do not know exists. I spent two weeks doing a complete physical and network audit of our IoT devices across all sites. This included:
+
+- Every camera and NVR, including their firmware versions and default password status.
+- Every environmental sensor (flood, soil, rain) and its data pathway.
+- Every converter, gateway, and edge device connecting field hardware to the IP network.
+
+The result was a spreadsheet that nobody had before. Several devices were running firmware from 2022. Two converters still had factory passwords. One NVR had an admin account with the password "admin123."
+
+### 2. Segment aggressively
+
+Field IoT devices should never share a VLAN with workstations, servers, or management interfaces. On our network, IoT sensors sit on dedicated VLANs with firewall rules that allow only the specific traffic they need:
+
+- Sensors can reach the data collection server on specific ports.
+- Cameras can reach the NVR on specific ports.
+- Nothing on the IoT VLAN can initiate outbound connections to the internet.
+- Management access to IoT devices is only available from a dedicated jump host.
+
+This segmentation means that even if a sensor or camera is compromised, the attacker cannot pivot to the rest of the network without breaking through additional firewall rules.
+
+### 3. Change every default credential
+
+This sounds basic enough that it should not need saying. But the 2026 botnet takedowns proved that millions of devices still run with factory passwords. Every device, every camera, every converter, every gateway, needs a unique, strong password set during deployment. Document it in your inventory.
+
+### 4. Treat firmware like you treat OS patches
+
+Field devices need firmware update cycles just like servers and workstations. I schedule quarterly firmware reviews where I check each manufacturer's site for updates. Critical security patches get applied within a week. Routine updates go into the next maintenance window.
+
+For devices where the manufacturer has stopped releasing updates, I evaluate whether to replace them or add compensating controls (tighter firewall rules, additional monitoring).
+
+### 5. Monitor for anomalies
+
+We added IoT VLAN traffic monitoring to our Grafana dashboards. The baseline is simple: each device type has an expected traffic pattern. A flood sensor sends small UDP packets every 30 seconds. A camera streams constant video at a predictable bitrate. If a device suddenly generates traffic outside its normal pattern, that is worth investigating.
+
+One of our cameras started generating unusual DNS queries about a month after we set this up. It turned out to be a firmware bug rather than a compromise, but the monitoring caught it before it could have been a problem.
+
+## The lifecycle problem nobody wants to discuss
+
+The hardest part of IoT security is not the technical controls. It is the economics. A serial converter costs 30 dollars. A flood sensor costs 50 dollars. These are cheap devices with thin margins, and manufacturers have little incentive to maintain firmware for five or ten years.
+
+That means the people deploying these devices, the infrastructure and field engineering teams, inherit the security responsibility. And that responsibility does not have a clear end date. As long as the device is on the network, someone needs to be watching it.
+
+The 2026 botnet takedowns removed 3 million devices from active botnets. But the underlying problem, millions of insecure devices connected to the internet with default credentials and abandoned firmware, remains. The next botnet will recruit new devices. Whether your devices are among them depends on whether someone is paying attention.

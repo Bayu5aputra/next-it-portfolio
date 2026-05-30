@@ -1,0 +1,135 @@
+---
+title: "Building an observability stack with Grafana and Docker for infrastructure monitoring"
+publishedAt: "2026-05-05"
+summary: "A practical walkthrough of deploying Prometheus, Grafana, and Loki in Docker containers to monitor field devices, with notes on OpenTelemetry adoption and SLO-based alerting."
+image: "/Blog.webp"
+tag: "Smart City"
+---
+
+## Dashboards are not observability
+
+When I first built our ATCS monitoring system at Sinar Mas Land, I thought I had it figured out. Grafana dashboards showing device uptime, Docker containers running Prometheus for metrics collection, and everything looking green. Then a traffic controller went offline for four hours during a weekend, and nobody noticed because the alert was buried in a Telegram channel with 200 other notifications.
+
+That experience forced me to rethink what monitoring actually means. A dashboard that nobody watches is decoration. Real observability means you find out about problems before they become outages, and you have enough context to fix them without guessing.
+
+## The stack and why each piece is there
+
+Here is what we run and the reasoning behind each component.
+
+### Prometheus: metrics collection
+
+Prometheus scrapes numeric metrics from devices and services at configurable intervals. For our infrastructure, it collects:
+
+- Device up/down status from SNMP exporters on routers and switches.
+- System metrics (CPU, memory, disk) from node_exporter on Linux hosts.
+- Custom metrics from IoT gateways that expose data over HTTP endpoints.
+
+Why Prometheus instead of alternatives? It runs well in containers, stores time-series data efficiently, and has a large ecosystem of exporters. The pull-based model also means you do not need to configure every device to push data somewhere. You configure Prometheus to scrape them.
+
+### Grafana: visualization and alerting
+
+Grafana connects to Prometheus (and Loki, and other data sources) and turns the data into panels, graphs, and alert rules. We use it for two distinct purposes:
+
+**Operational dashboards** that show the current state of infrastructure. These display on a wall-mounted screen in the operations room. If something is red, someone investigates.
+
+**Alert rules** that notify the on-call engineer when specific conditions are met. These are more targeted than the dashboards. A dashboard might show 50 devices. An alert fires only when a specific device has been unreachable for more than 5 minutes.
+
+### Loki: log aggregation
+
+Loki collects logs from our Docker containers, Linux hosts, and application services. It is designed to work with Grafana, so you can correlate a metrics spike with the log entries that happened at the same time.
+
+Before Loki, troubleshooting looked like this: see an alert, SSH into the device or server, manually grep through log files, piece together what happened. Now, I click on a metrics anomaly in Grafana and see the corresponding logs in the same view. The time savings during incident response are real.
+
+### Docker: the deployment layer
+
+Every component, Prometheus, Grafana, Loki, and their supporting exporters, runs in Docker containers managed with Docker Compose. This gives us:
+
+- **Reproducibility.** The same `docker-compose.yml` deploys the same stack on any server.
+- **Isolation.** If Grafana crashes, it does not take down Prometheus.
+- **Easy updates.** Updating a component means changing a version tag and running `docker compose up -d`.
+
+A simplified version of our compose file looks like this:
+
+```yaml
+services:
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
+  loki:
+    image: grafana/loki:3.1.0
+    volumes:
+      - loki_data:/loki
+    ports:
+      - "3100:3100"
+
+volumes:
+  prometheus_data:
+  grafana_data:
+  loki_data:
+```
+
+## What I got wrong the first time
+
+### Alerting on symptoms, not outcomes
+
+My initial alert rules looked like "CPU above 90% for 5 minutes" and "memory usage exceeds 85%." These generated noise. A server running at 91% CPU during a backup job is not a problem. A traffic controller that stops responding to management pings is.
+
+I rewrote our alerts around outcomes rather than resource thresholds:
+
+- "ATCS device X has not responded to SNMP polls for 5 minutes" instead of "CPU high on ATCS controller."
+- "Flood sensor Y has not sent data in the last 10 minutes" instead of "Network interface errors on IoT VLAN."
+- "NVR Z disk usage above 90% and recording has stopped" instead of "disk space low."
+
+The difference is that outcome-based alerts always mean something. When they fire, someone needs to act.
+
+### Not setting SLOs from the start
+
+Service Level Objectives (SLOs) sound formal, but they are just a way of saying "how reliable does this need to be?" We now define SLOs for our critical systems:
+
+- **ATCS controllers:** 99.5% uptime measured monthly (allows roughly 3.6 hours of downtime per month).
+- **CCTV recording:** 99% continuous recording per camera per month.
+- **Environmental sensors:** 95% data delivery rate (these are field devices exposed to weather, so we allow more tolerance).
+
+Grafana tracks these SLOs as burn-rate alerts. Instead of firing immediately when a device goes down, the alert fires when we are burning through our error budget too fast. This eliminates the noise from brief, self-recovering outages while ensuring we catch sustained problems early.
+
+## OpenTelemetry: where the stack is heading
+
+OpenTelemetry (OTel) is becoming the standard for instrumentation. It provides a vendor-neutral way to collect metrics, logs, and traces from applications and services. The main benefit is that you instrument your code once and can send the data to any backend, Prometheus, Grafana Cloud, Datadog, whatever you need.
+
+We have started adopting OTel for new services. Our custom IoT data collection agents now emit OTel-formatted metrics instead of exposing Prometheus endpoints directly. This means if we ever need to switch monitoring backends or add a second destination, the application code does not change.
+
+For existing infrastructure devices like routers and switches that only speak SNMP, we still use traditional Prometheus exporters. OTel is not a replacement for everything; it is an investment in flexibility for the components you control.
+
+## Cost and storage considerations
+
+At scale, monitoring data grows fast. Each Prometheus metric with a 15-second scrape interval generates roughly 5,760 data points per day. Multiply that by a few hundred metrics across dozens of devices, and storage adds up.
+
+We manage this with a tiered approach:
+
+- **Hot storage (last 7 days):** Full-resolution data on fast SSD volumes. This is what operators interact with during incident response.
+- **Warm storage (7-90 days):** Downsampled data with 5-minute resolution. Good enough for trend analysis and capacity planning.
+- **Cold storage (90+ days):** Aggregated daily/weekly summaries exported to object storage for compliance and long-term reporting.
+
+For Loki logs, we apply similar retention policies. Debug-level logs are retained for 3 days. Warning and error logs are retained for 30 days. This keeps storage costs predictable without losing the data that matters.
+
+## What I would tell someone starting from scratch
+
+Start small. Get Prometheus and Grafana running in Docker on a single server. Add one or two devices to monitor. Get comfortable with PromQL queries and alert rules. Then expand.
+
+Do not try to monitor everything on day one. Pick your most critical devices, the ones where downtime causes the most pain, and get those right first. Add more devices and more metrics once the foundation is solid.
+
+And write down your SLOs before you build dashboards. Knowing what "good enough" looks like prevents you from over-engineering the monitoring and under-investing in the response process.

@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface VariableProximityProps {
   label: string;
@@ -20,6 +20,7 @@ const VariableProximity: React.FC<VariableProximityProps> = ({
   className = "",
   onClick,
 }) => {
+  const [isMobile, setIsMobile] = useState(false);
   // Store refs to all character spans
   const charRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const containerRef = useRef<HTMLSpanElement>(null);
@@ -28,7 +29,14 @@ const VariableProximity: React.FC<VariableProximityProps> = ({
   const words = useMemo(() => label.split(" "), [label]);
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
     const handleMouseMove = (e: MouseEvent) => {
+      if (window.innerWidth <= 768) return;
       const mouseX = e.clientX;
       const mouseY = e.clientY;
 
@@ -56,7 +64,10 @@ const VariableProximity: React.FC<VariableProximityProps> = ({
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   }, [fromWeight, toWeight, radius]);
 
   // Flatten logic for ref assignment
@@ -67,6 +78,26 @@ const VariableProximity: React.FC<VariableProximityProps> = ({
       onClick();
     }
   };
+
+  if (isMobile) {
+    return (
+      <span
+        ref={containerRef}
+        className={className}
+        onClick={onClick}
+        onKeyDown={handleKeyDown}
+        role={onClick ? "button" : "presentation"}
+        tabIndex={onClick ? 0 : undefined}
+        style={{
+          cursor: onClick ? "pointer" : "default",
+          display: "inline", // Allow container to flow normally
+        }}
+        aria-label={label}
+      >
+        {label}
+      </span>
+    );
+  }
 
   return (
     <span

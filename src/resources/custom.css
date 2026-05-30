@@ -86,3 +86,30 @@ html.theme-switching *::after {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+/* Chatbot Floating Container and Responsive Window */
+.chatbot-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+}
+
+.chatbot-window {
+  width: 360px;
+  height: 520px;
+  max-width: 360px;
+}
+
+@media (max-width: 768px) {
+  .chatbot-container {
+    bottom: 96px;
+    right: 16px;
+  }
+
+  .chatbot-window {
+    width: calc(100vw - 32px) !important;
+    height: calc(100vh - 160px) !important;
+    max-height: 520px;
+  }
+}
